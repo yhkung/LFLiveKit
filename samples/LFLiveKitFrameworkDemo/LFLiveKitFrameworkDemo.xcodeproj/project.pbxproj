@@ -32,9 +32,6 @@
 		84D0036E1DB8F86D00560583 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D0036D1DB8F86D00560583 /* AVFoundation.framework */; };
 		84D003711DB8F8BD00560583 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D003701DB8F8BD00560583 /* UIKit.framework */; };
 		84D003731DB8F8C200560583 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D003721DB8F8C200560583 /* Foundation.framework */; };
-		9A0EC8211F0FC04B00DAFEC0 /* LFLiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8495F6D01DB8F37E00542124 /* LFLiveKit.framework */; };
-		9A0EC8221F0FC29F00DAFEC0 /* LFLiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8495F6D01DB8F37E00542124 /* LFLiveKit.framework */; };
-		9A0EC8231F0FC29F00DAFEC0 /* LFLiveKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8495F6D01DB8F37E00542124 /* LFLiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9A0EC8511F0FC36800DAFEC0 /* adventure_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC82A1F0FC36800DAFEC0 /* adventure_map.png */; };
 		9A0EC8521F0FC36800DAFEC0 /* autumn_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC82B1F0FC36800DAFEC0 /* autumn_map.png */; };
 		9A0EC8531F0FC36800DAFEC0 /* bleak_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC82C1F0FC36800DAFEC0 /* bleak_map.png */; };
@@ -74,47 +71,43 @@
 		9A0EC8751F0FC36800DAFEC0 /* violet_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC84E1F0FC36800DAFEC0 /* violet_map.png */; };
 		9A0EC8761F0FC36800DAFEC0 /* vivid_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC84F1F0FC36800DAFEC0 /* vivid_map.png */; };
 		9A0EC8771F0FC36800DAFEC0 /* warm_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC8501F0FC36800DAFEC0 /* warm_map.png */; };
+		9A131F451F0FE4FF003B5379 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A131F231F0FD6D8003B5379 /* ping.framework */; };
+		9AD8FDC71F0FE9D700C282B7 /* LFLiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */; };
+		9AD8FDC81F0FE9F300C282B7 /* LFLiveKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8495F6CF1DB8F37E00542124 /* PBXContainerItemProxy */ = {
+		9AD8FDC11F0FE9BE00C282B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */;
+			containerPortal = 9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8495F66B1DB8F14600542124;
 			remoteInfo = LFLiveKitFramework;
 		};
-		9A0EC81E1F0FC02B00DAFEC0 /* PBXContainerItemProxy */ = {
+		9AD8FDC31F0FE9BE00C282B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8495F66A1DB8F14600542124;
-			remoteInfo = LFLiveKitFramework;
-		};
-		9A0EC8241F0FC29F00DAFEC0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8495F66A1DB8F14600542124;
-			remoteInfo = LFLiveKitFramework;
-		};
-		9AB281221F0FBB5C008B94F2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */;
+			containerPortal = 9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C1FF50A11E46520D0029A4D4;
 			remoteInfo = LFLiveKitBundle;
 		};
+		9AD8FDC51F0FE9D200C282B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8495F66A1DB8F14600542124;
+			remoteInfo = LFLiveKitFramework;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9A0EC8261F0FC29F00DAFEC0 /* Embed Frameworks */ = {
+		9A131F501F0FE5EE003B5379 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9A0EC8231F0FC29F00DAFEC0 /* LFLiveKit.framework in Embed Frameworks */,
+				9AD8FDC81F0FE9F300C282B7 /* LFLiveKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,7 +128,6 @@
 		8495F6BD1DB8F37300542124 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8495F6C01DB8F37300542124 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8495F6C21DB8F37300542124 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LFLiveKit.xcodeproj; path = ../../FrameWork/LFLiveKit.xcodeproj; sourceTree = "<group>"; };
 		8495F6D51DB8F49800542124 /* GPUImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GPUImage.framework; path = vendors/GPUImage.framework; sourceTree = "<group>"; };
 		8495F6D61DB8F49800542124 /* pili-librtmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "pili-librtmp.framework"; path = "vendors/pili-librtmp.framework"; sourceTree = "<group>"; };
 		84D003461DB8F7FA00560583 /* UIControl+YYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+YYAdd.h"; sourceTree = "<group>"; };
@@ -200,6 +192,8 @@
 		9A0EC84E1F0FC36800DAFEC0 /* violet_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = violet_map.png; path = ../../../../FrameWork/LFLiveKitBundle/Filters/violet_map.png; sourceTree = "<group>"; };
 		9A0EC84F1F0FC36800DAFEC0 /* vivid_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vivid_map.png; path = ../../../../FrameWork/LFLiveKitBundle/Filters/vivid_map.png; sourceTree = "<group>"; };
 		9A0EC8501F0FC36800DAFEC0 /* warm_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warm_map.png; path = ../../../../FrameWork/LFLiveKitBundle/Filters/warm_map.png; sourceTree = "<group>"; };
+		9A131F231F0FD6D8003B5379 /* ping.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ping.framework; path = "../../../../../../../../Users/ludahong/Library/Developer/Xcode/DerivedData/LFLiveKitFrameworkDemo-cemoqvziaeivoueyrbaiirnfrxbn/Build/Products/Debug-iphoneos/ping.framework"; sourceTree = "<group>"; };
+		9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LFLiveKit.xcodeproj; path = ../../FrameWork/LFLiveKit.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,8 +201,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A0EC8211F0FC04B00DAFEC0 /* LFLiveKit.framework in Frameworks */,
-				9A0EC8221F0FC29F00DAFEC0 /* LFLiveKit.framework in Frameworks */,
+				9AD8FDC71F0FE9D700C282B7 /* LFLiveKit.framework in Frameworks */,
+				9A131F451F0FE4FF003B5379 /* ping.framework in Frameworks */,
 				84D003731DB8F8C200560583 /* Foundation.framework in Frameworks */,
 				84D003711DB8F8BD00560583 /* UIKit.framework in Frameworks */,
 				84D0036E1DB8F86D00560583 /* AVFoundation.framework in Frameworks */,
@@ -224,7 +218,7 @@
 		8495F6A21DB8F37300542124 = {
 			isa = PBXGroup;
 			children = (
-				8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */,
+				9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */,
 				8495F6AD1DB8F37300542124 /* LFLiveKitFrameworkDemo */,
 				8495F6AC1DB8F37300542124 /* Products */,
 				8495F6D41DB8F49800542124 /* Frameworks */,
@@ -269,18 +263,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8495F6C91DB8F37E00542124 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8495F6D01DB8F37E00542124 /* LFLiveKit.framework */,
-				9AB281231F0FBB5C008B94F2 /* LFLiveKitBundle.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		8495F6D41DB8F49800542124 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9A131F231F0FD6D8003B5379 /* ping.framework */,
 				843591671DD204FA00811FC7 /* libstdc++.6.0.9.tbd */,
 				84D003721DB8F8C200560583 /* Foundation.framework */,
 				84D003701DB8F8BD00560583 /* UIKit.framework */,
@@ -370,6 +356,15 @@
 			name = filterbundle;
 			sourceTree = "<group>";
 		};
+		9AD8FDBC1F0FE9BE00C282B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */,
+				9AD8FDC41F0FE9BE00C282B7 /* LFLiveKitBundle.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -380,13 +375,12 @@
 				8495F6A71DB8F37300542124 /* Sources */,
 				8495F6A81DB8F37300542124 /* Frameworks */,
 				8495F6A91DB8F37300542124 /* Resources */,
-				9A0EC8261F0FC29F00DAFEC0 /* Embed Frameworks */,
+				9A131F501F0FE5EE003B5379 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				9A0EC81F1F0FC02B00DAFEC0 /* PBXTargetDependency */,
-				9A0EC8251F0FC29F00DAFEC0 /* PBXTargetDependency */,
+				9AD8FDC61F0FE9D200C282B7 /* PBXTargetDependency */,
 			);
 			name = LFLiveKitFrameworkDemo;
 			productName = LFLiveKitFrameworkDemo;
@@ -422,8 +416,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 8495F6C91DB8F37E00542124 /* Products */;
-					ProjectRef = 8495F6C81DB8F37E00542124 /* LFLiveKit.xcodeproj */;
+					ProductGroup = 9AD8FDBC1F0FE9BE00C282B7 /* Products */;
+					ProjectRef = 9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -434,18 +428,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8495F6D01DB8F37E00542124 /* LFLiveKit.framework */ = {
+		9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = LFLiveKit.framework;
-			remoteRef = 8495F6CF1DB8F37E00542124 /* PBXContainerItemProxy */;
+			remoteRef = 9AD8FDC11F0FE9BE00C282B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		9AB281231F0FBB5C008B94F2 /* LFLiveKitBundle.bundle */ = {
+		9AD8FDC41F0FE9BE00C282B7 /* LFLiveKitBundle.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = LFLiveKitBundle.bundle;
-			remoteRef = 9AB281221F0FBB5C008B94F2 /* PBXContainerItemProxy */;
+			remoteRef = 9AD8FDC31F0FE9BE00C282B7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -529,15 +523,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9A0EC81F1F0FC02B00DAFEC0 /* PBXTargetDependency */ = {
+		9AD8FDC61F0FE9D200C282B7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = LFLiveKitFramework;
-			targetProxy = 9A0EC81E1F0FC02B00DAFEC0 /* PBXContainerItemProxy */;
-		};
-		9A0EC8251F0FC29F00DAFEC0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = LFLiveKitFramework;
-			targetProxy = 9A0EC8241F0FC29F00DAFEC0 /* PBXContainerItemProxy */;
+			targetProxy = 9AD8FDC51F0FE9D200C282B7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -658,6 +647,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../../LFLiveKit",
+					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -680,6 +670,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../../LFLiveKit",
+					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

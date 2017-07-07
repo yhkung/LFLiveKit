@@ -16,7 +16,7 @@
 #import "LFLiveStreamInfo.h"
 #import "LFGPUImageBeautyFilter.h"
 #import "LFH264VideoEncoder.h"
-
+#import "STDPingServices.h"
 
 @interface LFLiveSession ()<LFAudioCaptureDelegate, LFVideoCaptureDelegate, LFAudioEncodingDelegate, LFVideoEncodingDelegate, LFStreamSocketDelegate>
 
@@ -94,8 +94,36 @@
     _audioCaptureSource.running = NO;
 }
 
+//for ping.
+static STDPingServices    *pingServices=NULL;
+- (void)StartPing:(NSString*)host {
+    
+    NSLog(@"111pingstart...");
+    
+    pingServices = [STDPingServices startPingAddress:host sendnum:15 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
+        if (pingItem.status != STDPingStatusFinished) {
+            //[weakSelf.textView appendText:pingItem.description];
+            NSLog(@"%@",pingItem.description);
+        } else {
+            
+            NSLog(@"%f",[STDPingItem getLossPercent]);
+            NSLog(@"%li",[STDPingItem staticAvgRtridTime]);
+            
+//            pingloss = [NSString stringWithFormat:@"%f",[STDPingItem getLossPercent]];
+//            pingRtt = [NSString stringWithFormat:@"%li",[STDPingItem staticAvgRtridTime]];
+//            
+//            [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&prtt=%@&plss=%@",pingRtt,pingloss];
+//            int k=0;
+        }
+    }];
+}
+
+
 #pragma mark -- CustomMethod
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
+    //dhlu
+    [self StartPing:@"www.baidu.com"];
+    //end dhlu
     if (!streamInfo) return;
     _streamInfo = streamInfo;
     _streamInfo.videoConfiguration = _videoConfiguration;

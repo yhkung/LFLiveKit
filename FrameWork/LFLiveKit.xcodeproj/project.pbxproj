@@ -233,6 +233,7 @@
 		8495F6A01DB8F27000542124 /* LFStreamRtmpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5B71D768B6E00752B56 /* LFStreamRtmpSocket.m */; };
 		8495F6A11DB8F27000542124 /* NSMutableArray+LFAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */; };
 		84D0036F1DB8F88F00560583 /* LFNALUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B58F1D768B6E00752B56 /* LFNALUnit.cpp */; };
+		9A131F511F0FE6DC003B5379 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A131F301F0FD9F9003B5379 /* ping.framework */; };
 		C1296A041E50735D00C992C7 /* RKGPUImageColorMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C1296A011E5072C400C992C7 /* RKGPUImageColorMapFilter.m */; };
 		C1296A051E50736000C992C7 /* RKGPUImageColorMapFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = C1296A001E5072C400C992C7 /* RKGPUImageColorMapFilter.h */; };
 		C1296A091E50C99200C992C7 /* RKGUPImageSoftLightFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = C1296A061E50C99200C992C7 /* RKGUPImageSoftLightFilter.h */; };
@@ -382,6 +383,23 @@
 		C1FF50F41E46523F0029A4D4 /* vivid_map.png in Resources */ = {isa = PBXBuildFile; fileRef = C1FF50CD1E46523F0029A4D4 /* vivid_map.png */; };
 		C1FF50F51E46523F0029A4D4 /* warm_map.png in Resources */ = {isa = PBXBuildFile; fileRef = C1FF50CE1E46523F0029A4D4 /* warm_map.png */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A131F2F1F0FD9F9003B5379 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9A5B44021EE970BB00496065;
+			remoteInfo = ping;
+		};
+		9A131F491F0FE5C3003B5379 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A5B44011EE970BB00496065;
+			remoteInfo = ping;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		84358E871DD1FEB500811FC7 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgram.h; sourceTree = "<group>"; };
@@ -804,6 +822,7 @@
 		84D8B5B81D768B6E00752B56 /* LFStreamSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFStreamSocket.h; sourceTree = "<group>"; };
 		84D8B5B91D768B6E00752B56 /* NSMutableArray+LFAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+LFAdd.h"; sourceTree = "<group>"; };
 		84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LFAdd.m"; sourceTree = "<group>"; };
+		9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
 		C1296A001E5072C400C992C7 /* RKGPUImageColorMapFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKGPUImageColorMapFilter.h; sourceTree = "<group>"; };
 		C1296A011E5072C400C992C7 /* RKGPUImageColorMapFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKGPUImageColorMapFilter.m; sourceTree = "<group>"; };
 		C1296A061E50C99200C992C7 /* RKGUPImageSoftLightFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKGUPImageSoftLightFilter.h; sourceTree = "<group>"; };
@@ -967,6 +986,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A131F511F0FE6DC003B5379 /* ping.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1395,6 +1415,7 @@
 		84D8B3861D7574D600752B56 = {
 			isa = PBXGroup;
 			children = (
+				9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */,
 				84D8B5831D768B6E00752B56 /* LFLiveKit */,
 				84D8B4CA1D757ED600752B56 /* libz.tbd */,
 				84D8B4C81D757ED100752B56 /* libstdc++.tbd */,
@@ -1537,6 +1558,14 @@
 				84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */,
 			);
 			path = publish;
+			sourceTree = "<group>";
+		};
+		9A131F2C1F0FD9F9003B5379 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A131F301F0FD9F9003B5379 /* ping.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		9ABACAFFC334034AA0115426 /* Frameworks */ = {
@@ -1803,6 +1832,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9A131F4A1F0FE5C3003B5379 /* PBXTargetDependency */,
 			);
 			name = LFLiveKitFramework;
 			productName = LFLiveKitFramework;
@@ -1837,6 +1867,7 @@
 				TargetAttributes = {
 					8495F66A1DB8F14600542124 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 977R38D9R7;
 						ProvisioningStyle = Automatic;
 					};
 					C1FF50A01E46520D0029A4D4 = {
@@ -1860,6 +1891,12 @@
 			mainGroup = 84D8B3861D7574D600752B56;
 			productRefGroup = 84D8B3911D7574D600752B56 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9A131F2C1F0FD9F9003B5379 /* Products */;
+					ProjectRef = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8495F66A1DB8F14600542124 /* LFLiveKitFramework */,
@@ -1867,6 +1904,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9A131F301F0FD9F9003B5379 /* ping.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ping.framework;
+			remoteRef = 9A131F2F1F0FD9F9003B5379 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8495F6691DB8F14600542124 /* Resources */ = {
@@ -2232,6 +2279,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9A131F4A1F0FE5C3003B5379 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ping;
+			targetProxy = 9A131F491F0FE5C3003B5379 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		C16E7DB81E5417BB0067DE28 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -2265,7 +2320,9 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 977R38D9R7;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2273,6 +2330,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LFLiveKit/**",
+					"$(PROJECT_DIR)/../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2295,6 +2353,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 977R38D9R7;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2302,6 +2361,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LFLiveKit/**",
+					"$(PROJECT_DIR)/../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2354,6 +2414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../ping/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2396,6 +2457,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../ping/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
