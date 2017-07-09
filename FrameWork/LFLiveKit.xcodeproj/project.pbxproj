@@ -206,7 +206,6 @@
 		8495F6851DB8F1EE00542124 /* LFFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5AB1D768B6E00752B56 /* LFFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8495F6861DB8F1EE00542124 /* LFLiveDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5AD1D768B6E00752B56 /* LFLiveDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8495F6871DB8F1EE00542124 /* LFLiveStreamInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5AF1D768B6E00752B56 /* LFLiveStreamInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8495F6881DB8F1EE00542124 /* LFVideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5B11D768B6E00752B56 /* LFVideoFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8495F6891DB8F1EE00542124 /* LFStreamingBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5B41D768B6E00752B56 /* LFStreamingBuffer.h */; };
 		8495F68A1DB8F1EE00542124 /* LFStreamRTMPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5B61D768B6E00752B56 /* LFStreamRTMPSocket.h */; };
 		8495F68B1DB8F1EE00542124 /* LFStreamSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5B81D768B6E00752B56 /* LFStreamSocket.h */; };
@@ -233,7 +232,12 @@
 		8495F6A01DB8F27000542124 /* LFStreamRtmpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5B71D768B6E00752B56 /* LFStreamRtmpSocket.m */; };
 		8495F6A11DB8F27000542124 /* NSMutableArray+LFAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */; };
 		84D0036F1DB8F88F00560583 /* LFNALUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B58F1D768B6E00752B56 /* LFNALUnit.cpp */; };
-		9A131F511F0FE6DC003B5379 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A131F301F0FD9F9003B5379 /* ping.framework */; };
+		9A4BDE431F12500D0045F8FA /* TextLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A4BDE411F12500D0045F8FA /* TextLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A4BDE441F12500D0045F8FA /* TextLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BDE421F12500D0045F8FA /* TextLog.m */; };
+		9A4BDE471F1251EB0045F8FA /* TextLog.h in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BDE411F12500D0045F8FA /* TextLog.h */; };
+		9A4BDE501F1252F60045F8FA /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4BDE4D1F1252DC0045F8FA /* ping.framework */; };
+		9A4BDE541F12562E0045F8FA /* LFLiveKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5A51D768B6E00752B56 /* LFLiveKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A4BDE551F12562E0045F8FA /* LFVideoFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 84D8B5B11D768B6E00752B56 /* LFVideoFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1296A041E50735D00C992C7 /* RKGPUImageColorMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C1296A011E5072C400C992C7 /* RKGPUImageColorMapFilter.m */; };
 		C1296A051E50736000C992C7 /* RKGPUImageColorMapFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = C1296A001E5072C400C992C7 /* RKGPUImageColorMapFilter.h */; };
 		C1296A091E50C99200C992C7 /* RKGUPImageSoftLightFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = C1296A061E50C99200C992C7 /* RKGUPImageSoftLightFilter.h */; };
@@ -385,16 +389,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9A131F2F1F0FD9F9003B5379 /* PBXContainerItemProxy */ = {
+		9A4BDE4C1F1252DC0045F8FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+			containerPortal = 9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 9A5B44021EE970BB00496065;
 			remoteInfo = ping;
 		};
-		9A131F491F0FE5C3003B5379 /* PBXContainerItemProxy */ = {
+		9A4BDE4E1F1252EC0045F8FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+			containerPortal = 9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 9A5B44011EE970BB00496065;
 			remoteInfo = ping;
@@ -822,7 +826,9 @@
 		84D8B5B81D768B6E00752B56 /* LFStreamSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFStreamSocket.h; sourceTree = "<group>"; };
 		84D8B5B91D768B6E00752B56 /* NSMutableArray+LFAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+LFAdd.h"; sourceTree = "<group>"; };
 		84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LFAdd.m"; sourceTree = "<group>"; };
-		9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
+		9A4BDE411F12500D0045F8FA /* TextLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextLog.h; path = weaknet/TextLog.h; sourceTree = "<group>"; };
+		9A4BDE421F12500D0045F8FA /* TextLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextLog.m; path = weaknet/TextLog.m; sourceTree = "<group>"; };
+		9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
 		C1296A001E5072C400C992C7 /* RKGPUImageColorMapFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKGPUImageColorMapFilter.h; sourceTree = "<group>"; };
 		C1296A011E5072C400C992C7 /* RKGPUImageColorMapFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKGPUImageColorMapFilter.m; sourceTree = "<group>"; };
 		C1296A061E50C99200C992C7 /* RKGUPImageSoftLightFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKGUPImageSoftLightFilter.h; sourceTree = "<group>"; };
@@ -986,7 +992,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A131F511F0FE6DC003B5379 /* ping.framework in Frameworks */,
+				9A4BDE501F1252F60045F8FA /* ping.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1415,7 +1421,7 @@
 		84D8B3861D7574D600752B56 = {
 			isa = PBXGroup;
 			children = (
-				9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */,
+				9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */,
 				84D8B5831D768B6E00752B56 /* LFLiveKit */,
 				84D8B4CA1D757ED600752B56 /* libz.tbd */,
 				84D8B4C81D757ED100752B56 /* libstdc++.tbd */,
@@ -1443,6 +1449,7 @@
 		84D8B5831D768B6E00752B56 /* LFLiveKit */ = {
 			isa = PBXGroup;
 			children = (
+				9A4BDE401F124FF30045F8FA /* weaknet */,
 				84D8B5841D768B6E00752B56 /* capture */,
 				84D8B5891D768B6E00752B56 /* coder */,
 				84D8B59B1D768B6E00752B56 /* configuration */,
@@ -1560,10 +1567,19 @@
 			path = publish;
 			sourceTree = "<group>";
 		};
-		9A131F2C1F0FD9F9003B5379 /* Products */ = {
+		9A4BDE401F124FF30045F8FA /* weaknet */ = {
 			isa = PBXGroup;
 			children = (
-				9A131F301F0FD9F9003B5379 /* ping.framework */,
+				9A4BDE411F12500D0045F8FA /* TextLog.h */,
+				9A4BDE421F12500D0045F8FA /* TextLog.m */,
+			);
+			name = weaknet;
+			sourceTree = "<group>";
+		};
+		9A4BDE491F1252DC0045F8FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A4BDE4D1F1252DC0045F8FA /* ping.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1753,14 +1769,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A4BDE431F12500D0045F8FA /* TextLog.h in Headers */,
+				9A4BDE541F12562E0045F8FA /* LFLiveKit.h in Headers */,
 				8495F6861DB8F1EE00542124 /* LFLiveDebug.h in Headers */,
 				C1296A091E50C99200C992C7 /* RKGUPImageSoftLightFilter.h in Headers */,
-				8495F6881DB8F1EE00542124 /* LFVideoFrame.h in Headers */,
 				8495F6871DB8F1EE00542124 /* LFLiveStreamInfo.h in Headers */,
 				8495F6851DB8F1EE00542124 /* LFFrame.h in Headers */,
 				C16E7D4A1E534A820067DE28 /* RKGPUImageMemoryFilter.h in Headers */,
 				8495F6841DB8F1EE00542124 /* LFAudioFrame.h in Headers */,
 				C16E7D7A1E53F5C50067DE28 /* RKGPUImageDeepFilter.h in Headers */,
+				9A4BDE551F12562E0045F8FA /* LFVideoFrame.h in Headers */,
 				C16E7D021E5347CC0067DE28 /* RKGPUImageSoftFilter.h in Headers */,
 				C16E7D621E53F4DF0067DE28 /* RKGPUImageFantasyFilter.h in Headers */,
 				8495F67F1DB8F1EE00542124 /* LFLiveVideoConfiguration.h in Headers */,
@@ -1832,7 +1850,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9A131F4A1F0FE5C3003B5379 /* PBXTargetDependency */,
+				9A4BDE4F1F1252EC0045F8FA /* PBXTargetDependency */,
 			);
 			name = LFLiveKitFramework;
 			productName = LFLiveKitFramework;
@@ -1893,8 +1911,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 9A131F2C1F0FD9F9003B5379 /* Products */;
-					ProjectRef = 9A131F2B1F0FD9F9003B5379 /* ping.xcodeproj */;
+					ProductGroup = 9A4BDE491F1252DC0045F8FA /* Products */;
+					ProjectRef = 9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1906,11 +1924,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9A131F301F0FD9F9003B5379 /* ping.framework */ = {
+		9A4BDE4D1F1252DC0045F8FA /* ping.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ping.framework;
-			remoteRef = 9A131F2F1F0FD9F9003B5379 /* PBXContainerItemProxy */;
+			remoteRef = 9A4BDE4C1F1252DC0045F8FA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -2033,6 +2051,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A4BDE471F1251EB0045F8FA /* TextLog.h in Sources */,
 				C16E7D221E5348F80067DE28 /* RKGPUImageCoolFilter.m in Sources */,
 				C16E7D461E534A420067DE28 /* RKGPUImageBleakFilter.m in Sources */,
 				843592181DD20A9700811FC7 /* amf.c in Sources */,
@@ -2090,6 +2109,7 @@
 				843591911DD20A7E00811FC7 /* GPUImageDirectionalSobelEdgeDetectionFilter.m in Sources */,
 				843591921DD20A7E00811FC7 /* GPUImageDissolveBlendFilter.m in Sources */,
 				843591931DD20A7E00811FC7 /* GPUImageDivideBlendFilter.m in Sources */,
+				9A4BDE441F12500D0045F8FA /* TextLog.m in Sources */,
 				843591941DD20A7E00811FC7 /* GPUImageEmbossFilter.m in Sources */,
 				843591951DD20A7E00811FC7 /* GPUImageErosionFilter.m in Sources */,
 				843591961DD20A7E00811FC7 /* GPUImageExclusionBlendFilter.m in Sources */,
@@ -2280,10 +2300,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9A131F4A1F0FE5C3003B5379 /* PBXTargetDependency */ = {
+		9A4BDE4F1F1252EC0045F8FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ping;
-			targetProxy = 9A131F491F0FE5C3003B5379 /* PBXContainerItemProxy */;
+			targetProxy = 9A4BDE4E1F1252EC0045F8FA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2328,9 +2348,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/LFLiveKit/**",
+					"$(PROJECT_DIR)/../LFLiveKit",
 					"$(PROJECT_DIR)/../ping/**",
+					"$(PROJECT_DIR)/../LFLiveKit/weaknet",
 				);
 				INFOPLIST_FILE = LFLiveKitFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2359,9 +2379,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/LFLiveKit/**",
+					"$(PROJECT_DIR)/../LFLiveKit",
 					"$(PROJECT_DIR)/../ping/**",
+					"$(PROJECT_DIR)/../LFLiveKit/weaknet",
 				);
 				INFOPLIST_FILE = LFLiveKitFramework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2414,7 +2434,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../ping/**";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../ping/**",
+					"$(PROJECT_DIR)/../LFLiveKit",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2457,7 +2480,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../ping/**";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../ping/**",
+					"$(PROJECT_DIR)/../LFLiveKit",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;

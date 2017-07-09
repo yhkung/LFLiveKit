@@ -71,7 +71,6 @@
 		9A0EC8751F0FC36800DAFEC0 /* violet_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC84E1F0FC36800DAFEC0 /* violet_map.png */; };
 		9A0EC8761F0FC36800DAFEC0 /* vivid_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC84F1F0FC36800DAFEC0 /* vivid_map.png */; };
 		9A0EC8771F0FC36800DAFEC0 /* warm_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A0EC8501F0FC36800DAFEC0 /* warm_map.png */; };
-		9A131F451F0FE4FF003B5379 /* ping.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A131F231F0FD6D8003B5379 /* ping.framework */; };
 		9AD8FDC71F0FE9D700C282B7 /* LFLiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */; };
 		9AD8FDC81F0FE9F300C282B7 /* LFLiveKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9AD8FDC21F0FE9BE00C282B7 /* LFLiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -202,7 +201,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AD8FDC71F0FE9D700C282B7 /* LFLiveKit.framework in Frameworks */,
-				9A131F451F0FE4FF003B5379 /* ping.framework in Frameworks */,
 				84D003731DB8F8C200560583 /* Foundation.framework in Frameworks */,
 				84D003711DB8F8BD00560583 /* UIKit.framework in Frameworks */,
 				84D0036E1DB8F86D00560583 /* AVFoundation.framework in Frameworks */,
@@ -646,7 +644,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../LFLiveKit",
+					"$(PROJECT_DIR)/../../LFLiveKit/**",
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
@@ -669,7 +667,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../LFLiveKit",
+					"$(PROJECT_DIR)/../../LFLiveKit/**",
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;

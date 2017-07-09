@@ -17,6 +17,7 @@
 #import "LFGPUImageBeautyFilter.h"
 #import "LFH264VideoEncoder.h"
 #import "STDPingServices.h"
+#import "TextLog.h"
 
 @interface LFLiveSession ()<LFAudioCaptureDelegate, LFVideoCaptureDelegate, LFAudioEncodingDelegate, LFVideoEncodingDelegate, LFStreamSocketDelegate>
 
@@ -122,7 +123,8 @@ static STDPingServices    *pingServices=NULL;
 #pragma mark -- CustomMethod
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
     //dhlu
-    [self StartPing:@"www.baidu.com"];
+    //[self StartPing:@"www.baidu.com"];
+    [TextLog StartPing:@"www.baidu.com"];
     //end dhlu
     if (!streamInfo) return;
     _streamInfo = streamInfo;
