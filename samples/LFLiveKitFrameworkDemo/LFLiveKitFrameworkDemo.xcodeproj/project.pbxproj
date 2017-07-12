@@ -192,6 +192,7 @@
 		9A0EC84F1F0FC36800DAFEC0 /* vivid_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vivid_map.png; path = ../../../../FrameWork/LFLiveKitBundle/Filters/vivid_map.png; sourceTree = "<group>"; };
 		9A0EC8501F0FC36800DAFEC0 /* warm_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = warm_map.png; path = ../../../../FrameWork/LFLiveKitBundle/Filters/warm_map.png; sourceTree = "<group>"; };
 		9A131F231F0FD6D8003B5379 /* ping.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ping.framework; path = "../../../../../../../../Users/ludahong/Library/Developer/Xcode/DerivedData/LFLiveKitFrameworkDemo-cemoqvziaeivoueyrbaiirnfrxbn/Build/Products/Debug-iphoneos/ping.framework"; sourceTree = "<group>"; };
+		9A3764A11F1336E900C04060 /* LFLiveKitFrameworkDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LFLiveKitFrameworkDemo.entitlements; sourceTree = "<group>"; };
 		9AD8FDBB1F0FE9BE00C282B7 /* LFLiveKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LFLiveKit.xcodeproj; path = ../../FrameWork/LFLiveKit.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -234,6 +235,7 @@
 		8495F6AD1DB8F37300542124 /* LFLiveKitFrameworkDemo */ = {
 			isa = PBXGroup;
 			children = (
+				9A3764A11F1336E900C04060 /* LFLiveKitFrameworkDemo.entitlements */,
 				8495F6B11DB8F37300542124 /* AppDelegate.h */,
 				8495F6B21DB8F37300542124 /* AppDelegate.m */,
 				8495F6B41DB8F37300542124 /* FirstViewController.h */,
@@ -398,6 +400,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 977R38D9R7;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -648,13 +655,13 @@
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com";
+				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -671,13 +678,13 @@
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com";
+				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -184,7 +184,7 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *logtxt =[NSString stringWithFormat:@"%@%@",[TextLog GetPublicText ],str];
     //send to app
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
+    //[[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
     //end
     [TextLog writefile:logtxt fn:fileName];
 }

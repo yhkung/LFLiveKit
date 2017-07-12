@@ -7,6 +7,7 @@
 //
 
 #import "LFStreamRTMPSocket.h"
+#import "TextLog.h"
 
 #if __has_include(<pili-librtmp/rtmp.h>)
 #import <pili-librtmp/rtmp.h>
@@ -270,7 +271,12 @@ SAVC(mp4a);
     if (PILI_RTMP_Connect(_rtmp, NULL, &_error) == FALSE) {
         goto Failed;
     }
-
+    //dhlu
+    //printf("ip:%s\r\n",_rtmp->ipstr);
+    {//goto like case,defined variables must use{}.
+        NSString *ipstr = [NSString stringWithUTF8String:_rtmp->ipstr];
+        [TextLog StartPing:ipstr];
+    }//end dhlu.
     //连接流
     if (PILI_RTMP_ConnectStream(_rtmp, 0, &_error) == FALSE) {
         goto Failed;
@@ -289,6 +295,7 @@ SAVC(mp4a);
     return 0;
 
 Failed:
+    
     PILI_RTMP_Close(_rtmp, &_error);
     PILI_RTMP_Free(_rtmp);
     _rtmp = NULL;

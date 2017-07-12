@@ -59,7 +59,10 @@
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @interface LFLiveSession ()
-
+{
+    int speedTimes;
+    CGFloat currentBandwidth;
+}
 /// 上传相对时间戳
 @property (nonatomic, assign) uint64_t relativeTimestamps;
 /// 音视频是否对齐
@@ -95,36 +98,14 @@
     _audioCaptureSource.running = NO;
 }
 
-//for ping.
-static STDPingServices    *pingServices=NULL;
-- (void)StartPing:(NSString*)host {
-    
-    NSLog(@"111pingstart...");
-    
-    pingServices = [STDPingServices startPingAddress:host sendnum:15 callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
-        if (pingItem.status != STDPingStatusFinished) {
-            //[weakSelf.textView appendText:pingItem.description];
-            NSLog(@"%@",pingItem.description);
-        } else {
-            
-            NSLog(@"%f",[STDPingItem getLossPercent]);
-            NSLog(@"%li",[STDPingItem staticAvgRtridTime]);
-            
-//            pingloss = [NSString stringWithFormat:@"%f",[STDPingItem getLossPercent]];
-//            pingRtt = [NSString stringWithFormat:@"%li",[STDPingItem staticAvgRtridTime]];
-//            
-//            [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&prtt=%@&plss=%@",pingRtt,pingloss];
-//            int k=0;
-        }
-    }];
-}
 
 
 #pragma mark -- CustomMethod
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
     //dhlu
-    //[self StartPing:@"www.baidu.com"];
-    [TextLog StartPing:@"www.baidu.com"];
+    self.showDebugInfo = true;
+    self.adaptiveBitrate = true;
+    speedTimes = 0;
     //end dhlu
     if (!streamInfo) return;
     _streamInfo = streamInfo;
@@ -223,8 +204,21 @@ static STDPingServices    *pingServices=NULL;
     });
 }
 
+
 - (void)socketDebug:(nullable id<LFStreamSocket>)socket debugInfo:(nullable LFLiveDebug *)debugInfo {
+    //begin dhlu,record upload.
+    speedTimes++;
+    currentBandwidth += debugInfo.currentBandwidth;
+    if( 10 == speedTimes ){
+        currentBandwidth=currentBandwidth/10;
+        
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&spd=%.1f",(float)currentBandwidth];
+        //reset.
+        speedTimes = 0;
+        currentBandwidth = 0;
+    }
     self.debugInfo = debugInfo;
+    //end dhlu.
     if (self.showDebugInfo) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:debugInfo:)]) {
@@ -235,6 +229,8 @@ static STDPingServices    *pingServices=NULL;
 }
 
 - (void)socketBufferStatus:(nullable id<LFStreamSocket>)socket status:(LFLiveBuffferState)status {
+    //dhlu
+    //end dhlu
     if((self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) && self.adaptiveBitrate){
         NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
         if (status == LFLiveBuffferDecline) {

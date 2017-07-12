@@ -726,6 +726,8 @@ int PILI_RTMP_SetupURL(PILI_RTMP *r, const char *url, RTMPError *error) {
     return TRUE;
 }
 
+//print ip
+
 static int add_addr_info(PILI_RTMP *r, struct addrinfo *hints, struct addrinfo **ai, AVal *host, int port, RTMPError *error) {
     char *hostname;
     int ret = TRUE;
@@ -938,6 +940,25 @@ int PILI_RTMP_Connect1(PILI_RTMP *r, PILI_RTMPPacket *cp, RTMPError *error) {
     return TRUE;
 }
 
+//dhlu
+//print ip
+void PrintIP(struct addrinfo *answer,char* ipstr){
+   
+    struct addrinfo *curr=answer;
+    //only use first
+    inet_ntop(AF_INET,
+              &(((struct sockaddr_in *)(curr->ai_addr))->sin_addr),
+              ipstr, 16);
+    printf("ip:%s\r\n", ipstr);
+    
+//    for (curr = answer; curr != NULL; curr = curr->ai_next) {
+//        inet_ntop(AF_INET,
+//                  &(((struct sockaddr_in *)(curr->ai_addr))->sin_addr),
+//                  ipstr, 16);
+//        printf("----%s/n", ipstr);
+//    }
+}
+
 int PILI_RTMP_Connect(PILI_RTMP *r, PILI_RTMPPacket *cp, RTMPError *error) {
     struct PILI_CONNECTION_TIME conn_time;
     if (!r->Link.hostname.av_len)
@@ -963,7 +984,10 @@ int PILI_RTMP_Connect(PILI_RTMP *r, PILI_RTMPPacket *cp, RTMPError *error) {
     }
     r->ip = 0; //useless for ipv6
     cur_ai = ai;
-
+    //dhlu
+    //char ipstr[16]={0};
+    PrintIP(cur_ai,r->ipstr);
+    //end dhlu
     int t1 = PILI_RTMP_GetTime();
     if (!PILI_RTMP_Connect0(r, cur_ai, port, error)) {
         freeaddrinfo(ai);
