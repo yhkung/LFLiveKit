@@ -359,7 +359,7 @@ inline static NSString *formatedSpeed(float bytes, float elapsed_milli) {
             if (_self.startLiveButton.selected) {
                 [_self.startLiveButton setTitle:@"结束直播" forState:UIControlStateNormal];
                 LFLiveStreamInfo *stream = [LFLiveStreamInfo new];
-                stream.url = @"rtmp://wansu-global-push-rtmp.17app.co/vod/dhlutest?wsSecret=30e0bc4150c8a7d10fec54764f3a9bcb&wsTime=1499790202&id=dhlutest";
+                stream.url = @"rtmp://wansu-global-push-rtmp.17app.co/vod/dhlutest?wsSecret=69fb13742b4ada305b878458ea42444b&wsTime=1500000083&id=dhlutest";
                 [_self.session startLive:stream];
             } else {
                 [_self.startLiveButton setTitle:@"开始直播" forState:UIControlStateNormal];

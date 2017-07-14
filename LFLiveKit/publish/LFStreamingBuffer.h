@@ -23,7 +23,7 @@ typedef NS_ENUM (NSUInteger, LFLiveBuffferState) {
 @protocol LFStreamingBufferDelegate <NSObject>
 @optional
 /** 当前buffer变动（增加or减少） 根据buffer中的updateInterval时间回调*/
-- (void)streamingBuffer:(nullable LFStreamingBuffer *)buffer bufferState:(LFLiveBuffferState)state;
+- (void)streamingBuffer:(nullable LFStreamingBuffer *)buffer bufferState:(LFLiveBuffferState)state RmExpire:(BOOL)RExpire bufNum:(int)bufNum;
 @end
 
 @interface LFStreamingBuffer : NSObject
