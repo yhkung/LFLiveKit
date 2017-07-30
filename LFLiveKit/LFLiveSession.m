@@ -107,11 +107,14 @@
 #pragma mark -- CustomMethod
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
     //dhlu
+    [TextLog SetLFLiveSessionDelegate:self.delegate];
     self.showDebugInfo = true;
     self.adaptiveBitrate = true;
     speedTimes = 0;
     sbTimes = 0;
     last_average_upload_speed = 0;
+    //some log
+    
     //end dhlu
     if (!streamInfo) return;
     _streamInfo = streamInfo;
@@ -217,8 +220,9 @@
     if( 0 != debugInfo.currentBandwidth ){
         currentBandwidth += debugInfo.currentBandwidth;
     }
-    if( 3 == speedTimes ){
-        last_average_upload_speed = currentBandwidth = currentBandwidth/3;
+    int checkTimes=3;
+    if( checkTimes == speedTimes ){
+        last_average_upload_speed = currentBandwidth = currentBandwidth/checkTimes;
         
         [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&spd=%.1f",(float)currentBandwidth];
          NSLog(@"last_average_upload_speed:%.1f",last_average_upload_speed);
@@ -243,7 +247,8 @@
     if( 1 == sbTimes ){
         NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
         CGFloat k = 0.9*(float)videoBitRate;
-        NSLog(@"videoBitRate:%@ 1.1bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
+        NSLog(@"videoBitRate:%@ 0.9*bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
         //increase
         if(last_average_upload_speed > 0.9*videoBitRate && false == RExpire){
             videoBitRate = videoBitRate + 50 * 1000;
@@ -259,7 +264,7 @@
             [self.videoEncoder setVideoBitRate:videoBitRate];
             NSLog(@"Decline bitrate %@", @(videoBitRate));
         }
-        [TextLog LogText:LOG_FILE_NAME format:@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
+        
         //NSLog(@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d last_average_upload_speed:%.1f",@(videoBitRate),@(RExpire),bufNum,last_average_upload_speed);
         
         //decrease

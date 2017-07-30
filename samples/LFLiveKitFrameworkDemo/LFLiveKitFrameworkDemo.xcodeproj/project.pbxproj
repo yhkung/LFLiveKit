@@ -655,13 +655,13 @@
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push";
+				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -678,13 +678,13 @@
 					"$(PROJECT_DIR)/../../ping/**",
 				);
 				INFOPLIST_FILE = LFLiveKitFrameworkDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push";
+				PRODUCT_BUNDLE_IDENTIFIER = "-7media.com.push2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

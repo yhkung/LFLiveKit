@@ -141,6 +141,27 @@ inline static NSString *formatedSpeed(float bytes, float elapsed_milli) {
 - (void)liveSession:(nullable LFLiveSession *)session debugInfo:(nullable LFLiveDebug *)debugInfo {
     NSLog(@"debugInfo uploadSpeed: %@", formatedSpeed(debugInfo.currentBandwidth, debugInfo.elapsedMilli));
 }
+//dhlu,receive log info.
+- (void)liveSession:(nullable LFLiveSession *)session dictLog:(nullable NSMutableDictionary *)dict{
+    //dictionary
+    NSMutableDictionary *dictionary3 = dict;
+    //一般枚举
+    NSArray *keys = [dictionary3 allKeys];
+    NSString* tmp=@"";;
+    int length = [keys count];
+    for (int i = 0; i < length; i ++) {
+        id key = [keys objectAtIndex:i];
+        id obj = [dictionary3 objectForKey:key];
+        if(0==i){
+            tmp = [NSString stringWithFormat:@"%@=%@",key,obj];
+        }else{
+            tmp = [tmp stringByAppendingFormat:@"&%@=%@",key,obj];
+        }
+    }
+    NSLog(@"111notify:%@",tmp);
+}
+//end dhlu
+
 
 /** callback socket errorcode */
 - (void)liveSession:(nullable LFLiveSession *)session errorCode:(LFLiveSocketErrorCode)errorCode {
@@ -359,7 +380,7 @@ inline static NSString *formatedSpeed(float bytes, float elapsed_milli) {
             if (_self.startLiveButton.selected) {
                 [_self.startLiveButton setTitle:@"结束直播" forState:UIControlStateNormal];
                 LFLiveStreamInfo *stream = [LFLiveStreamInfo new];
-                stream.url = @"rtmp://wansu-global-push-rtmp.17app.co/vod/dhlutest?wsSecret=69fb13742b4ada305b878458ea42444b&wsTime=1500000083&id=dhlutest";
+                stream.url = @"rtmp://wansu-global-push-rtmp.17app.co/vod/dhlutest?wsSecret=69ec5cb6909c5bd4b7f1621aaae1155e&wsTime=1501422475&id=dhlutest";
                 [_self.session startLive:stream];
             } else {
                 [_self.startLiveButton setTitle:@"开始直播" forState:UIControlStateNormal];

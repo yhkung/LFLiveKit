@@ -275,6 +275,7 @@ SAVC(mp4a);
     //printf("ip:%s\r\n",_rtmp->ipstr);
     {//goto like case,defined variables must use{}.
         NSString *ipstr = [NSString stringWithUTF8String:_rtmp->ipstr];
+        [TextLog Sethost:ipstr];
         [TextLog StartPing:ipstr];
     }//end dhlu.
     //连接流

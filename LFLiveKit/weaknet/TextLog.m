@@ -10,17 +10,21 @@
 #import "TextLog.h"
 #import "STDPingServices.h"
 
+
+static id<LFLiveSessionDelegate> delegate;
+
 static NSString *pt=@"";//scheme,protocal type.
 static NSString *mc=@"";//mac id
 static NSString *uid=@"";//User Id
 static NSString *sd=@"play";//stream direction
 static NSString *pd=@"wansu";//provider
 static NSString *lt=@"";//Log type
+static NSString *imd=@"";//iphone model
 static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
 static NSString *mod=@"";// phone model
 static NSString *cr=@"中华电信";
-static NSString *nt=@"";//net type
+static NSString *nt=@"";//net type,2g,3g,4g,wifi
 static NSString *lnt=@"";
 static NSString *ltt=@"";
 static NSString *mip=@"";//my public ip.
@@ -31,10 +35,15 @@ static NSString *host=@"";
 static NSString *publicStr=@"";//app version 17media.
 static NSString *pingRtt=@"";//ping round trip interval.
 static NSString *pingloss=@"";//ping packet loss.
+static NSString *sid=@"";//ping packet loss.
 
 
 @implementation TextLog : NSObject
 
+
++(void)SetLFLiveSessionDelegate:(id<LFLiveSessionDelegate>) dlg{
+    delegate = dlg;
+}
 
 +(void)Setpt:(NSString*)ptstr{
     pt = ptstr;
@@ -56,6 +65,10 @@ static NSString *pingloss=@"";//ping packet loss.
     lt = ltstr;
 }
 
+
++(void)Setimd:(NSString*)imdstr{
+    imd = imdstr;
+}
 +(void)Setos:(NSString*)osstr{
     os = osstr;
 }
@@ -99,8 +112,20 @@ static NSString *pingloss=@"";//ping packet loss.
     rg = rgstr;
 }
 
++(void)Setav17:(NSString*)av17str{
+    av17 = av17str;
+}
+
 +(void)Sethost:(NSString*)hoststr{
-    host = [[NSString alloc] initWithString:hoststr];
+    host = hoststr;
+}
+
++(NSString*)Gethost{
+    return  host;
+}
+
++(void)Setsid:(NSString*)sidstr{
+    sid = sidstr;
 }
 
 //for ping.
@@ -132,8 +157,10 @@ static STDPingServices    *pingServices=NULL;
     
     NSString *time = [TextLog GetTimeStr];
     
-    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&sd=%@&pd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&mip=%@&rg=%@&av17=%@&pt=%@&host=%@&url=%@&",
-                 time,mc,uid,sd,pd,os,osv,mod,cr,nt,mip,rg,av17,pt,host,url];
+//    publicStr = [NSString stringWithFormat:@"tm=%@&mc=%@&uid=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
+//                 time,mc,uid,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
+    publicStr = [NSString stringWithFormat:@"mc=%@&lnt=%@&ltt=%@&sd=%@&pd=%@&imd=%@&os=%@&osv=%@&mod=%@&cr=%@&nt=%@&rg=%@&av17=%@&pt=%@&host=%@&sid=%@&url=%@&",
+                 mc,lnt,ltt,sd,pd,imd,os,osv,mod,cr,nt,rg,av17,pt,host,sid,url];
     return  publicStr;
 }
 
@@ -175,6 +202,28 @@ static STDPingServices    *pingServices=NULL;
     [fileHandle closeFile];
 }
 
+
++(NSMutableDictionary*)ToDictiionary:(NSString *)lxt{
+    NSMutableDictionary *dict=[NSMutableDictionary dictionaryWithObjectsAndKeys:nil];
+    NSString* tmp = [NSString stringWithFormat:@"%@",lxt];
+    NSArray *aArray = [tmp componentsSeparatedByString:@"&"];
+    
+    long int count = [aArray count];
+    for (int i = 0 ; i < count; i++) {
+        //NSLog(@"1遍历array: %zi-->%@",i,[aArray objectAtIndex:i]);
+        NSString* str = [aArray objectAtIndex:i];
+        if(nil != str){
+            NSArray *aArray1 = [str componentsSeparatedByString:@"="];
+            NSString* key = [aArray1 objectAtIndex:0];
+            NSString* value = [aArray1 objectAtIndex:1];
+            if(nil!=key){
+                [dict setObject:value forKey:key];
+            }
+        }
+    }
+    return dict;
+}
+
 //format:  "lt=www&" "log=www&"
 +(void)LogText:(NSString *)fileName format:(NSString *)format, ...{
     va_list args;
@@ -183,10 +232,20 @@ static STDPingServices    *pingServices=NULL;
     va_end(args);
     
     NSString *logtxt =[NSString stringWithFormat:@"%@%@",[TextLog GetPublicText ],str];
+    //to dictionary
+    NSMutableDictionary *dict = [TextLog ToDictiionary:logtxt];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (delegate && [delegate respondsToSelector:@selector(liveSession:dictLog:)]) {
+            [delegate liveSession:nil dictLog:dict];
+        }
+    });
     //send to app
     //[[NSNotificationCenter defaultCenter] postNotificationName: @"NotificationFromIJK_Log" object: logtxt];
     //end
+#ifdef DEBUG
     [TextLog writefile:logtxt fn:fileName];
+#endif
 }
 
 @end
