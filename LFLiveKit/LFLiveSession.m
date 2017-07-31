@@ -18,6 +18,12 @@
 #import "LFH264VideoEncoder.h"
 #import "STDPingServices.h"
 #import "TextLog.h"
+//dhlu
+#import "MoLocationManager.h"
+#import <sys/utsname.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+//end dhlu
 
 @interface LFLiveSession ()<LFAudioCaptureDelegate, LFVideoCaptureDelegate, LFAudioEncodingDelegate, LFVideoEncodingDelegate, LFStreamSocketDelegate>
 
@@ -103,6 +109,74 @@
 }
 
 
+//dhlu
+-(void)GetCarried{
+    //获取本机运营商名称
+    
+    CTTelephonyNetworkInfo *info = [[CTTelephonyNetworkInfo alloc] init];
+    
+    CTCarrier *carrier = [info subscriberCellularProvider];
+    
+    //当前手机所属运营商名称
+    
+    NSString *mobile;
+    
+    //先判断有没有SIM卡，如果没有则不获取本机运营商
+    
+    if (!carrier.isoCountryCode) {
+        
+        NSLog(@"没有SIM卡");
+        
+        mobile = @"无运营商";
+        
+    }else{
+        
+        mobile = [carrier carrierName];
+        
+    }
+    [TextLog Setcr:mobile];
+    
+}
+
+-(void)GetDeviceInfo{
+    //NSString *strName = [[UIDevice currentDevice] name]; // Name of the phone as named by user------设备模式
+    NSString *strSysName = [[UIDevice currentDevice] systemName]; // "iPhone OS" //系统名称
+    NSString *strSysVersion = [[UIDevice currentDevice] systemVersion]; // "2.2.1” //系统版本号
+    //NSString *strModel = [[UIDevice currentDevice] model]; // "iPhone" on both devices
+    //NSString *strLocModel = [[UIDevice currentDevice] localizedModel]; // "iPhone" on both devices
+    //float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
+    
+    [TextLog Setimd:platform];
+    [TextLog Setos:strSysName];
+    [TextLog Setosv:strSysVersion];
+}
+
+-(void)Getgps{
+    //只获取一次
+    __block  BOOL isOnece = YES;
+    [MoLocationManager getMoLocationWithSuccess:^(double lat, double lng){
+        isOnece = NO;
+        //只打印一次经纬度
+        NSLog(@"lat lng (%f, %f)", lat, lng);
+        NSString *lngstr =  [NSString stringWithFormat:@"%f",lng];
+        NSString *latstr =  [NSString stringWithFormat:@"%f",lat];
+        [TextLog Setlnt:lngstr];
+        [TextLog Setltt:latstr];
+        if (!isOnece) {
+            [MoLocationManager stop];
+        }
+    } Failure:^(NSError *error){
+        isOnece = NO;
+        NSLog(@"error = %@", error);
+        if (!isOnece) {
+            [MoLocationManager stop];
+        }
+    }];
+}
+//end dhlu
 
 #pragma mark -- CustomMethod
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
@@ -114,7 +188,9 @@
     sbTimes = 0;
     last_average_upload_speed = 0;
     //some log
-    
+    [self GetCarried];
+    [self GetDeviceInfo];
+    [self Getgps];
     //end dhlu
     if (!streamInfo) return;
     _streamInfo = streamInfo;
@@ -197,6 +273,11 @@
     } else if(status == LFLiveStop || status == LFLiveError){
         self.uploading = NO;
     }
+    //dhlu
+    if( LFLiveError == (LFLiveState)status ){//connect error.
+         [TextLog LogText:LOG_FILE_NAME format:@"lt=cer&status=%d",status];
+    }
+    //end dhlu
     dispatch_async(dispatch_get_main_queue(), ^{
         self.state = status;
         if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:liveStateDidChange:)]) {
@@ -206,6 +287,9 @@
 }
 
 - (void)socketDidError:(nullable id<LFStreamSocket>)socket errorCode:(LFLiveSocketErrorCode)errorCode {
+    //dhlu
+    [TextLog LogText:LOG_FILE_NAME format:@"lt=pfld&er=%d",errorCode];
+    //end dhlu
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.delegate && [self.delegate respondsToSelector:@selector(liveSession:errorCode:)]) {
             [self.delegate liveSession:self errorCode:errorCode];
@@ -224,8 +308,8 @@
     if( checkTimes == speedTimes ){
         last_average_upload_speed = currentBandwidth = currentBandwidth/checkTimes;
         
-        [TextLog LogText:LOG_FILE_NAME format:@"lt=pv&spd=%.1f",(float)currentBandwidth];
-         NSLog(@"last_average_upload_speed:%.1f",last_average_upload_speed);
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=pspd&spd=%.1f",(float)currentBandwidth];
+         //NSLog(@"last_average_upload_speed:%.1f",last_average_upload_speed);
         //reset.
         speedTimes = 0;
         currentBandwidth = 0;
@@ -247,8 +331,9 @@
     if( 1 == sbTimes ){
         NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
         CGFloat k = 0.9*(float)videoBitRate;
-        [TextLog LogText:LOG_FILE_NAME format:@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
-        NSLog(@"videoBitRate:%@ 0.9*bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@",@(videoBitRate)];
+        //[TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
+        //NSLog(@"videoBitRate:%@ 0.9*bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
         //increase
         if(last_average_upload_speed > 0.9*videoBitRate && false == RExpire){
             videoBitRate = videoBitRate + 50 * 1000;

@@ -232,6 +232,8 @@
 		8495F6A01DB8F27000542124 /* LFStreamRtmpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5B71D768B6E00752B56 /* LFStreamRtmpSocket.m */; };
 		8495F6A11DB8F27000542124 /* NSMutableArray+LFAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */; };
 		84D0036F1DB8F88F00560583 /* LFNALUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D8B58F1D768B6E00752B56 /* LFNALUnit.cpp */; };
+		9A42D3AB1F2F49640091169B /* MoLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A42D3A91F2F49640091169B /* MoLocationManager.h */; };
+		9A42D3AC1F2F49640091169B /* MoLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A42D3AA1F2F49640091169B /* MoLocationManager.m */; };
 		9A4BDE431F12500D0045F8FA /* TextLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A4BDE411F12500D0045F8FA /* TextLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A4BDE441F12500D0045F8FA /* TextLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BDE421F12500D0045F8FA /* TextLog.m */; };
 		9A4BDE471F1251EB0045F8FA /* TextLog.h in Sources */ = {isa = PBXBuildFile; fileRef = 9A4BDE411F12500D0045F8FA /* TextLog.h */; };
@@ -826,6 +828,8 @@
 		84D8B5B81D768B6E00752B56 /* LFStreamSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFStreamSocket.h; sourceTree = "<group>"; };
 		84D8B5B91D768B6E00752B56 /* NSMutableArray+LFAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+LFAdd.h"; sourceTree = "<group>"; };
 		84D8B5BA1D768B6E00752B56 /* NSMutableArray+LFAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+LFAdd.m"; sourceTree = "<group>"; };
+		9A42D3A91F2F49640091169B /* MoLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoLocationManager.h; path = weaknet/MoLocationManager.h; sourceTree = "<group>"; };
+		9A42D3AA1F2F49640091169B /* MoLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoLocationManager.m; path = weaknet/MoLocationManager.m; sourceTree = "<group>"; };
 		9A4BDE411F12500D0045F8FA /* TextLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextLog.h; path = weaknet/TextLog.h; sourceTree = "<group>"; };
 		9A4BDE421F12500D0045F8FA /* TextLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextLog.m; path = weaknet/TextLog.m; sourceTree = "<group>"; };
 		9A4BDE481F1252DC0045F8FA /* ping.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ping.xcodeproj; path = ../ping/ping.xcodeproj; sourceTree = "<group>"; };
@@ -1570,6 +1574,8 @@
 		9A4BDE401F124FF30045F8FA /* weaknet */ = {
 			isa = PBXGroup;
 			children = (
+				9A42D3A91F2F49640091169B /* MoLocationManager.h */,
+				9A42D3AA1F2F49640091169B /* MoLocationManager.m */,
 				9A4BDE411F12500D0045F8FA /* TextLog.h */,
 				9A4BDE421F12500D0045F8FA /* TextLog.m */,
 			);
@@ -1781,6 +1787,7 @@
 				9A4BDE551F12562E0045F8FA /* LFVideoFrame.h in Headers */,
 				C16E7D021E5347CC0067DE28 /* RKGPUImageSoftFilter.h in Headers */,
 				C16E7D621E53F4DF0067DE28 /* RKGPUImageFantasyFilter.h in Headers */,
+				9A42D3AB1F2F49640091169B /* MoLocationManager.h in Headers */,
 				8495F67F1DB8F1EE00542124 /* LFLiveVideoConfiguration.h in Headers */,
 				8495F67E1DB8F1EE00542124 /* LFLiveAudioConfiguration.h in Headers */,
 				C16E7D261E5349330067DE28 /* RKGPUImageFreezeFilter.h in Headers */,
@@ -2090,6 +2097,7 @@
 				843591811DD20A7E00811FC7 /* GPUImageColorConversion.m in Sources */,
 				843591821DD20A7E00811FC7 /* GPUImageColorDodgeBlendFilter.m in Sources */,
 				843591831DD20A7E00811FC7 /* GPUImageColorInvertFilter.m in Sources */,
+				9A42D3AC1F2F49640091169B /* MoLocationManager.m in Sources */,
 				C16E7D521E534AE60067DE28 /* RKGPUImagePureFilter.m in Sources */,
 				843591841DD20A7E00811FC7 /* GPUImageColorLocalBinaryPatternFilter.m in Sources */,
 				843591851DD20A7E00811FC7 /* GPUImageColorMatrixFilter.m in Sources */,
