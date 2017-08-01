@@ -16,14 +16,14 @@ static id<LFLiveSessionDelegate> delegate;
 static NSString *pt=@"";//scheme,protocal type.
 static NSString *mc=@"";//mac id
 static NSString *uid=@"";//User Id
-static NSString *sd=@"play";//stream direction
-static NSString *pd=@"wansu";//provider
+static NSString *sd=@"push";//stream direction
+static NSString *pd=@"";//provider
 static NSString *lt=@"";//Log type
 static NSString *imd=@"";//iphone model
 static NSString *os=@"";//os type
 static NSString *osv=@"";//Os version
 static NSString *mod=@"";// phone model
-static NSString *cr=@"中华电信";
+static NSString *cr=@"";
 static NSString *nt=@"";//net type,2g,3g,4g,wifi
 static NSString *lnt=@"";
 static NSString *ltt=@"";
