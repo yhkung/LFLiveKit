@@ -205,34 +205,34 @@ NSInteger frameDataCompare(id obj1, id obj2, void *context){
     /** 采样 3个阶段   如果网络都是好或者都是差给回调 */
     _currentInterval += self.updateInterval;
     //dhlu
-    bufNum += self.list.count;
+    //bufNum += self.list.count;
     //end dhlu
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     [self.thresholdList addObject:@(self.list.count)];
     //dhlu
-    NSLog(@"RmExpire:%@ frameNum:%d",@(RExpire),self.list.count);
+    //NSLog(@"RmExpire:%@ frameNum:%d",@(RExpire),self.list.count);
     //end dhlu
     dispatch_semaphore_signal(_lock);
     
     if (self.currentInterval >= self.callBackInterval) {
         //dhlu
-        bufNum = bufNum/(_currentInterval/self.updateInterval);//average.
+        //bufNum = bufNum/(_currentInterval/self.updateInterval);//average.
         //end
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
-            [self.delegate streamingBuffer:self bufferState:LFLiveBuffferIncrease RmExpire:RExpire bufNum:bufNum];
-        }
-        
-        //LFLiveBuffferState state = [self currentBufferState];
-//        if (state == LFLiveBuffferIncrease) {
-//            if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
-//                [self.delegate streamingBuffer:self bufferState:LFLiveBuffferIncrease RmExpire:RExpire bufNum:bufNum];
-//            }
-//        } else if (state == LFLiveBuffferDecline) {
-//            if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
-//                [self.delegate streamingBuffer:self bufferState:LFLiveBuffferDecline RmExpire:RExpire bufNum:bufNum];
-//            }
+//        if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
+//            [self.delegate streamingBuffer:self bufferState:LFLiveBuffferIncrease RmExpire:RExpire bufNum:bufNum];
 //        }
+        
+        LFLiveBuffferState state = [self currentBufferState];
+        if (state == LFLiveBuffferIncrease) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
+                [self.delegate streamingBuffer:self bufferState:LFLiveBuffferIncrease RmExpire:RExpire bufNum:bufNum];
+            }
+        } else if (state == LFLiveBuffferDecline) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(streamingBuffer:bufferState:RmExpire:bufNum:)]) {
+                [self.delegate streamingBuffer:self bufferState:LFLiveBuffferDecline RmExpire:RExpire bufNum:bufNum];
+            }
+        }
 
         self.currentInterval = 0;
         //dhlu

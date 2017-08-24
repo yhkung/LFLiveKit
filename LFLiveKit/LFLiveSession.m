@@ -327,36 +327,36 @@
 
 - (void)socketBufferStatus:(nullable id<LFStreamSocket>)socket status:(LFLiveBuffferState)status RmExpire:(BOOL)RExpire bufNum:(int)bufNum {
     //dhlu
-    sbTimes++;
-    if( 1 == sbTimes ){
-        NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
-        CGFloat k = 0.9*(float)videoBitRate;
-        [TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@",@(videoBitRate)];
-        //[TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
-        //NSLog(@"videoBitRate:%@ 0.9*bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
-        //increase
-        if(last_average_upload_speed > 0.9*videoBitRate && false == RExpire){
-            videoBitRate = videoBitRate + 50 * 1000;
-            if(videoBitRate>800*1000) videoBitRate = 800*1000;
-            [self.videoEncoder setVideoBitRate:videoBitRate];
-            NSLog(@"Increase bitrate %@", @(videoBitRate));
-        }
-        
-        if( true == RExpire &&  last_average_upload_speed < 0.8*videoBitRate )
-        {
-            videoBitRate = videoBitRate - 100 * 1000;
-            if(videoBitRate<400*1000) videoBitRate = 400*1000;
-            [self.videoEncoder setVideoBitRate:videoBitRate];
-            NSLog(@"Decline bitrate %@", @(videoBitRate));
-        }
-        
-        //NSLog(@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d last_average_upload_speed:%.1f",@(videoBitRate),@(RExpire),bufNum,last_average_upload_speed);
-        
-        //decrease
-        //reset
-        sbTimes=0;
-    }
-    return;
+//    sbTimes++;
+//    if( 1 == sbTimes ){
+//        NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
+//        CGFloat k = 0.9*(float)videoBitRate;
+//        [TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@",@(videoBitRate)];
+//        //[TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@&RExpire=%@&bufNum=%d",@(videoBitRate),@(RExpire),bufNum];
+//        //NSLog(@"videoBitRate:%@ 0.9*bitrate:%.1f RExpire:%@ lau:%.1f bufNum:%d",@(videoBitRate),k,@(RExpire),last_average_upload_speed,bufNum);
+//        //increase
+//        if(last_average_upload_speed > 0.9*videoBitRate && false == RExpire){
+//            videoBitRate = videoBitRate + 50 * 1000;
+//            if(videoBitRate>800*1000) videoBitRate = 800*1000;
+//            [self.videoEncoder setVideoBitRate:videoBitRate];
+//            NSLog(@"Increase bitrate %@", @(videoBitRate));
+//        }
+//        
+//        if( true == RExpire &&  last_average_upload_speed < 0.8*videoBitRate )
+//        {
+//            videoBitRate = videoBitRate - 100 * 1000;
+//            if(videoBitRate<400*1000) videoBitRate = 400*1000;
+//            [self.videoEncoder setVideoBitRate:videoBitRate];
+//            NSLog(@"Decline bitrate %@", @(videoBitRate));
+//        }
+//        
+//        //NSLog(@"lt=vb&vbr=%@&RExpire=%@&bufNum=%d last_average_upload_speed:%.1f",@(videoBitRate),@(RExpire),bufNum,last_average_upload_speed);
+//        
+//        //decrease
+//        //reset
+//        sbTimes=0;
+//    }
+//    return;
     //end dhlu
     if((self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) && self.adaptiveBitrate){
         NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
@@ -373,6 +373,9 @@
                 NSLog(@"Decline bitrate %@", @(videoBitRate));
             }
         }
+        //dhlu
+        [TextLog LogText:LOG_FILE_NAME format:@"lt=pbrt&vbr=%@",@(videoBitRate)];
+        //end dhlu
     }
 }
 
