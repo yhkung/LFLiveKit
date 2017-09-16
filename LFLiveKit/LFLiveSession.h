@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureType) {
     LFLiveCaptureVideo,         //< capture onlt video
     LFLiveInputAudio,           //< only audio (External input audio)
     LFLiveInputVideo,           //< only video (External input video)
+    LFLiveMixAudio,             //< mix input audio
 };
 
 
@@ -32,10 +33,12 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureTypeMask) {
     LFLiveCaptureMaskVideo = (1 << LFLiveCaptureVideo),                                 ///< only inner capture video (no audio)
     LFLiveInputMaskAudio = (1 << LFLiveInputAudio),                                     ///< only outer input audio (no video)
     LFLiveInputMaskVideo = (1 << LFLiveInputVideo),                                     ///< only outer input video (no audio)
+    LFLiveMixMaskAudio = (1 << LFLiveMixAudio | LFLiveCaptureMaskAudio),                ///< mix inner capture audio
     LFLiveCaptureMaskAll = (LFLiveCaptureMaskAudio | LFLiveCaptureMaskVideo),           ///< inner capture audio and video
     LFLiveInputMaskAll = (LFLiveInputMaskAudio | LFLiveInputMaskVideo),                 ///< outer input audio and video(method see pushVideo and pushAudio)
     LFLiveCaptureMaskAudioInputVideo = (LFLiveCaptureMaskAudio | LFLiveInputMaskVideo), ///< inner capture audio and outer input video(method pushVideo and setRunning)
     LFLiveCaptureMaskVideoInputAudio = (LFLiveCaptureMaskVideo | LFLiveInputMaskAudio), ///< inner capture video and outer input audio(method pushAudio and setRunning)
+    LFLiveMixMaskAudioInputVideo = (LFLiveMixMaskAudio | LFLiveInputMaskVideo),         ///< mix inner capture audio and outer input video(method pushVideo and setRunning)
     LFLiveCaptureDefaultMask = LFLiveCaptureMaskAll                                     ///< default is inner capture audio and video
 };
 
@@ -53,6 +56,8 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureTypeMask) {
 //end dhlu
 /** callback socket errorcode */
 - (void)liveSession:(nullable LFLiveSession *)session errorCode:(LFLiveSocketErrorCode)errorCode;
+/** callback inner audio data */
+- (void)liveSession:(nullable LFLiveSession *)session audioDataBeforeMixing:(nullable NSData *)audioData;
 @end
 
 @class LFLiveStreamInfo;
@@ -123,7 +128,7 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureTypeMask) {
 @property (nonatomic, strong, nullable) UIView *warterMarkView;
 
 /* The currentImage is videoCapture shot */
-@property (nonatomic, strong,readonly ,nullable) UIImage *currentImage;
+@property (nonatomic, strong, readonly, nullable) UIImage *currentImage;
 
 /* The saveLocalVideo is save the local video */
 @property (nonatomic, assign) BOOL saveLocalVideo;
@@ -133,6 +138,9 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureTypeMask) {
 
 /* The currentColorFilterName is localized name of current color filter */
 @property (nonatomic, copy, readonly, nullable) NSString *currentColorFilterName;
+
+/** The mirrorOuput control mirror of output is on or off */
+@property (nonatomic, assign) BOOL mirrorOutput;
 
 #pragma mark - Initializer
 ///=============================================================================
@@ -170,6 +178,8 @@ typedef NS_ENUM(NSInteger,LFLiveCaptureTypeMask) {
 
 /** Switch to next color filter. */
 - (void)nextColorFilter;
+
+- (void)playSound:(nonnull NSURL *)soundUrl;
 
 @end
 

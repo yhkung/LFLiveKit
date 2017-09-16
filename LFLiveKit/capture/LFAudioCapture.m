@@ -7,6 +7,7 @@
 //
 
 #import "LFAudioCapture.h"
+#import "RKSoundMix.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
@@ -20,6 +21,9 @@ NSString *const LFAudioComponentFailedToCreateNotification = @"LFAudioComponentF
 @property (nonatomic, assign) BOOL isRunning;
 @property (nonatomic, strong,nullable) LFLiveAudioConfiguration *configuration;
 
+@property (strong, nonatomic) RKSoundMix *soundMix;
+@property (strong, nonatomic) RKAudioDataMix *audioMix;
+
 @end
 
 @implementation LFAudioCapture
@@ -32,7 +36,7 @@ NSString *const LFAudioComponentFailedToCreateNotification = @"LFAudioComponentF
         self.taskQueue = dispatch_queue_create("com.youku.Laifeng.audioCapture.Queue", NULL);
         
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        
+        [session setMode:AVAudioSessionModeDefault error:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver: self
                                                  selector: @selector(handleRouteChange:)
@@ -45,8 +49,8 @@ NSString *const LFAudioComponentFailedToCreateNotification = @"LFAudioComponentF
         
         AudioComponentDescription acd;
         acd.componentType = kAudioUnitType_Output;
-        //acd.componentSubType = kAudioUnitSubType_VoiceProcessingIO;
-        acd.componentSubType = kAudioUnitSubType_RemoteIO;
+//        acd.componentSubType = kAudioUnitSubType_VoiceProcessingIO;
+        acd.componentSubType = configuration.echoCancellation ? kAudioUnitSubType_VoiceProcessingIO : kAudioUnitSubType_RemoteIO;
         acd.componentManufacturer = kAudioUnitManufacturer_Apple;
         acd.componentFlags = 0;
         acd.componentFlagsMask = 0;
@@ -107,6 +111,43 @@ NSString *const LFAudioComponentFailedToCreateNotification = @"LFAudioComponentF
             self.component = nil;
         }
     });
+}
+
+- (void)mixSound:(nonnull NSURL *)url {
+    if ([self.soundMix.soundURL isEqual:url]) {
+        if (!self.soundMix.isFinished) {
+            return;
+        } else {
+            [self.soundMix reset];
+        }
+    } else {
+        self.soundMix = [[RKSoundMix alloc] initWithURL:url];
+    }
+}
+
+- (void)mixSideData:(nonnull NSData *)data {
+    if (!self.audioMix) {
+        self.audioMix = [[RKAudioDataMix alloc] init];
+    }
+    [self.audioMix pushData:data];
+}
+
+- (void)processAudio:(AudioBufferList)buffers {
+    if (self.soundMix && !self.soundMix.isFinished) {
+        [self.soundMix process:buffers];
+    }
+    [self.delegate captureOutput:self audioBeforeSideMixing:[NSData dataWithBytes:buffers.mBuffers[0].mData length:buffers.mBuffers[0].mDataByteSize]];
+
+    if (self.audioMix) {
+        [self.audioMix process:buffers];
+    }
+    if (self.muted) {
+        for (int i = 0; i < buffers.mNumberBuffers; i++) {
+            AudioBuffer ab = buffers.mBuffers[i];
+            memset(ab.mData, 0, ab.mDataByteSize);
+        }
+    }
+    [self.delegate captureOutput:self didFinishAudioProcessing:[NSData dataWithBytes:buffers.mBuffers[0].mData length:buffers.mBuffers[0].mDataByteSize]];
 }
 
 #pragma mark -- Setter
@@ -238,18 +279,8 @@ static OSStatus handleInputBuffer(void *inRefCon,
                                           inBusNumber,
                                           inNumberFrames,
                                           &buffers);
-
-        if (source.muted) {
-            for (int i = 0; i < buffers.mNumberBuffers; i++) {
-                AudioBuffer ab = buffers.mBuffers[i];
-                memset(ab.mData, 0, ab.mDataByteSize);
-            }
-        }
-
         if (!status) {
-            if (source.delegate && [source.delegate respondsToSelector:@selector(captureOutput:audioData:)]) {
-                [source.delegate captureOutput:source audioData:[NSData dataWithBytes:buffers.mBuffers[0].mData length:buffers.mBuffers[0].mDataByteSize]];
-            }
+            [source processAudio:buffers];
         }
         return status;
     }

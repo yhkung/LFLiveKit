@@ -214,6 +214,11 @@
 - (void)pushAudio:(nullable NSData*)audioData{
     if(self.captureType & LFLiveInputMaskAudio){
         if (self.uploading) [self.audioEncoder encodeAudioData:audioData timeStamp:NOW];
+        
+    } else if(self.captureType & LFLiveMixMaskAudioInputVideo) {
+        if (audioData) {
+            [self.audioCaptureSource mixSideData:audioData];
+        }
     }
 }
 
@@ -225,6 +230,10 @@
     [self.videoCaptureSource nextColorFilter];
 }
 
+- (void)playSound:(nonnull NSURL *)soundUrl {
+    [self.audioCaptureSource mixSound:soundUrl];
+}
+
 #pragma mark -- PrivateMethod
 - (void)pushSendBuffer:(LFFrame*)frame{
     if(self.relativeTimestamps == 0){
@@ -234,10 +243,21 @@
     [self.socket sendFrame:frame];
 }
 
-#pragma mark -- CaptureDelegate
-- (void)captureOutput:(nullable LFAudioCapture *)capture audioData:(nullable NSData*)audioData {
-    if (self.uploading) [self.audioEncoder encodeAudioData:audioData timeStamp:NOW];
+#pragma mark -- Audio Capture Delegate
+
+- (void)captureOutput:(nullable LFAudioCapture *)capture audioBeforeSideMixing:(nullable NSData *)data {
+    if ([self.delegate respondsToSelector:@selector(liveSession:audioDataBeforeMixing:)]) {
+        [self.delegate liveSession:self audioDataBeforeMixing:data];
+    }
 }
+
+- (void)captureOutput:(nullable LFAudioCapture *)capture didFinishAudioProcessing:(nullable NSData *)data {
+    if (self.uploading) {
+        [self.audioEncoder encodeAudioData:data timeStamp:NOW];
+    }
+}
+
+#pragma mark - Video Capture Delegate
 
 - (void)captureOutput:(nullable LFVideoCapture *)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer {
     if (self.uploading) [self.videoEncoder encodeVideoData:pixelBuffer timeStamp:NOW];
@@ -489,6 +509,16 @@
 
 - (BOOL)mirror {
     return self.videoCaptureSource.mirror;
+}
+
+- (void)setMirrorOutput:(BOOL)mirrorOutput {
+    [self willChangeValueForKey:@"mirrorOutput"];
+    [self.videoCaptureSource setMirrorOutput:mirrorOutput];
+    [self didChangeValueForKey:@"mirrorOutput"];
+}
+
+- (BOOL)mirrorOutput {
+    return self.videoCaptureSource.mirrorOutput;
 }
 
 - (void)setMuted:(BOOL)muted {

@@ -257,6 +257,11 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
     _mirror = mirror;
 }
 
+- (void)setMirrorOutput:(BOOL)mirrorOutput {
+    _mirrorOutput = mirrorOutput;
+    [self reloadFilter];
+}
+
 - (void)setBeautyFace:(BOOL)beautyFace{
     _beautyFace = beautyFace;
     [self reloadFilter];
@@ -382,25 +387,31 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
     [self.output removeAllTargets];
     [self.cropfilter removeAllTargets];
     [self.colorFilter removeAllTargets];
+    [self.beautyFilter removeAllTargets];
     
     self.output = [[LFGPUImageEmptyFilter alloc] init];
     self.filter = [[GPUImageFilterGroup alloc] init];
     
     self.colorFilter = self.colorFilters[self.currentColorFilterIndex];
 
+    // 美肌
     if (self.beautyFace) {
         self.beautyFilter = [[LFGPUImageBeautyFilter alloc] init];
-        [(GPUImageFilterGroup *)self.filter addFilter:self.beautyFilter];
-        [self.beautyFilter addTarget:self.colorFilter];
+        
         [(GPUImageFilterGroup *)self.filter setInitialFilters:@[self.beautyFilter]];
+        [(GPUImageFilterGroup *)self.filter addFilter:self.beautyFilter];
+        
+        [self.beautyFilter addTarget:self.colorFilter];
+        [(GPUImageFilterGroup *)self.filter addFilter:self.colorFilter];
+        [(GPUImageFilterGroup *)self.filter setTerminalFilter:self.colorFilter];
         
     } else {
         self.beautyFilter = nil;
+        
         [(GPUImageFilterGroup *)self.filter setInitialFilters:@[self.colorFilter]];
+        [(GPUImageFilterGroup *)self.filter addFilter:self.colorFilter];
+        [(GPUImageFilterGroup *)self.filter setTerminalFilter:self.colorFilter];
     }
-    
-    [(GPUImageFilterGroup *)self.filter addFilter:self.colorFilter];
-    [(GPUImageFilterGroup *)self.filter setTerminalFilter:self.colorFilter];
     
     ///< 调节镜像
     [self reloadMirror];
@@ -425,7 +436,7 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
         [self.uiElementInput update];
     }else{
         [self.filter addTarget:self.output];
-        [self.output addTarget:self.gpuImageView];
+        [self.filter addTarget:self.gpuImageView];
         if(self.saveLocalVideo) [self.output addTarget:self.movieWriter];
     }
     
@@ -433,7 +444,6 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
     [self.output forceProcessingAtSize:self.configuration.videoSize];
     [self.blendFilter forceProcessingAtSize:self.configuration.videoSize];
     [self.uiElementInput forceProcessingAtSize:self.configuration.videoSize];
-    
     
     //< 输出数据
     __weak typeof(self) _self = self;
@@ -451,6 +461,8 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
 //    }
     
     [self.gpuImageView setInputRotation:(self.mirror && self.captureDevicePosition == AVCaptureDevicePositionFront) ? kGPUImageFlipHorizonal : kGPUImageNoRotation atIndex:0];
+    
+    [self.output setInputRotation:(self.mirrorOutput && self.captureDevicePosition == AVCaptureDevicePositionFront) ? kGPUImageFlipHorizonal : kGPUImageNoRotation atIndex:0];
 }
 
 #pragma mark Notification
