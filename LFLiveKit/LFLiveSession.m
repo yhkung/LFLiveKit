@@ -206,6 +206,25 @@
     [self.audioCaptureSource stopMixAllSounds];
 }
 
+- (void)sendSeiJson:(nonnull id)jsonObj {
+    if (self.uploading) {
+        NSData *data = [NSJSONSerialization dataWithJSONObject:jsonObj options:0 error:nil];
+        if (data) {
+            [self.socket sendSeiWithJson:data];
+        }
+    }
+}
+
+- (void)sendSeiWithGameState:(int)state gameId:(NSInteger)gameId quizNo:(NSInteger)quizNo {
+    NSDictionary *dic = @{@"timestamp" : @([NSDate date].timeIntervalSince1970),
+                          @"trivia" : @{@"gameID" : @(gameId),
+                                        @"status" : @(state),
+                                        @"quizNo" : @(quizNo)
+                                        }
+                          };
+    [self sendSeiJson:dic];
+}
+
 #pragma mark -- PrivateMethod
 - (void)pushSendBuffer:(LFFrame*)frame{
     if(self.relativeTimestamps == 0){

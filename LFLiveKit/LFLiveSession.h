@@ -220,5 +220,9 @@ typedef NS_ENUM(NSUInteger, LFAudioMixVolume) {
 
 - (void)stopAllSounds;
 
+- (void)sendSeiJson:(nonnull id)jsonObj;
+
+- (void)sendSeiWithGameState:(int)state gameId:(NSInteger)gameId quizNo:(NSInteger)quizNo;
+
 @end
 

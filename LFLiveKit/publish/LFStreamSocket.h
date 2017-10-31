@@ -32,6 +32,9 @@
 - (void)stop;
 - (void)sendFrame:(nullable LFFrame *)frame;
 - (void)setDelegate:(nullable id <LFStreamSocketDelegate>)delegate;
+
+- (void)sendSeiWithJson:(nonnull NSData *)data;
+
 @optional
 - (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream;
 - (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream reconnectInterval:(NSInteger)reconnectInterval reconnectCount:(NSInteger)reconnectCount;
