@@ -68,6 +68,8 @@ typedef NS_ENUM(NSInteger, RKColorFilter) {
 /** The beautyFace control capture shader filter empty or beautiy */
 @property (nonatomic, assign) BOOL beautyFace;
 
+@property (nonatomic, assign) BOOL beautyFaceEnhanced;
+
 /** The torch control capture flash is on or off */
 @property (nonatomic, assign) BOOL torch;
 

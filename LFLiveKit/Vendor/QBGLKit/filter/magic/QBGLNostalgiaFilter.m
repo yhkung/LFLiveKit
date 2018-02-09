@@ -77,10 +77,10 @@ char * const kQBNostalgiaFilterFragment;
     return @[_curveDrawable, _curve2Drawable];
 }
 
-- (GLuint)render {
+- (GLuint)renderAtIndex:(GLuint)index {
     [self.program setParameter:"texelWidthOffset" floatValue:1 / self.inputSize.width];
     [self.program setParameter:"texelHeightOffset" floatValue:1 / self.inputSize.height];
-    return [super render];
+    return [super renderAtIndex:index];
 }
 
 @end

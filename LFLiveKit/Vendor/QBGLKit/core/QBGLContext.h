@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import <GLKit/GLKit.h>
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMedia/CoreMedia.h>
 #import "QBGLFilterTypes.h"
+#import "QBGLUtils.h"
 
 @interface QBGLContext : NSObject
 
@@ -23,6 +25,10 @@
 
 @property (nonatomic) QBGLFilterType colorFilterType;
 @property (nonatomic) BOOL beautyEnabled;
+@property (nonatomic) BOOL beautyEnhanced;
+@property (nonatomic) BOOL drawDisplay;
+@property (nonatomic) BOOL displayMirror;
+@property (nonatomic) BOOL outputMirror;
 
 - (instancetype)initWithContext:(EAGLContext *)context;
 
@@ -32,8 +38,12 @@
 
 - (void)render;
 
-- (void)renderToOutput;
+//- (void)draw;
 
-- (void)setRotation:(float)degrees flipHorizontal:(BOOL)flip;
+- (void)drawToOutput;
+
+- (void)setDisplayOrientation:(UIInterfaceOrientation)orientation cameraPosition:(AVCaptureDevicePosition)position;
+
+- (UIView *)displayView;
 
 @end

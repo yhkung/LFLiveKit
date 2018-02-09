@@ -9,6 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/EAGL.h>
 #import <UIKit/UIKit.h>
+#import "QBGLUtils.h"
+
+typedef NS_ENUM(NSUInteger, QBGLImageRotation) {
+    QBGLImageRotationNone,
+    QBGLImageRotationLeft,
+    QBGLImageRotationRight,
+    QBGLImageRotationFlipVertical,
+    QBGLImageRotationFlipHorizonal,
+    QBGLImageRotationRightFlipVertical,
+    QBGLImageRotationRightFlipHorizontal,
+    QBGLImageRotation180
+};
 
 @class QBGLProgram;
 @class QBGLDrawable;
@@ -17,7 +29,14 @@
 
 @property (strong, nonatomic, readonly) QBGLProgram *program;
 
+@property (nonatomic) QBGLImageRotation inputRotation;
 @property (nonatomic) CGSize inputSize;
+@property (nonatomic) CGSize outputSize;
+
+@property (nonatomic) CVOpenGLESTextureCacheRef textureCacheRef;
+@property (nonatomic) GLuint outputTextureId;
+
+@property (nonatomic, readonly) CVPixelBufferRef outputPixelBuffer;
 
 - (instancetype)initWithVertexShader:(const char *)vertexShader
                       fragmentShader:(const char *)fragmentShader;
@@ -32,15 +51,24 @@
  */
 - (void)deleteTextures;
 
-- (void)loadBGRA:(CVPixelBufferRef)pixelBuffer textureCache:(CVOpenGLESTextureCacheRef)textureCacheRef;
+- (void)loadBGRA:(CVPixelBufferRef)pixelBuffer;
 
-- (void)loadYUV:(CVPixelBufferRef)pixelBuffer textureCache:(CVOpenGLESTextureCacheRef)textureCacheRef;
+- (void)loadTexture:(GLuint)textureId;
 
 /**
- * Prepare for drawing and return the next available active texture index.
+ * Prepare for drawing from texture index and return the next available active texture index.
+ */
+- (GLuint)renderAtIndex:(GLuint)index;
+
+/**
+ * Prepare for drawing from texture 0 and return the next available active texture index.
  */
 - (GLuint)render;
 
 - (NSArray<QBGLDrawable*> *)renderTextures;
+
+- (void)draw;
+
+- (void)setRotation:(float)degrees flipHorizontal:(BOOL)flip;
 
 @end

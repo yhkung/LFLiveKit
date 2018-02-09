@@ -931,6 +931,18 @@
 		BE4935F6200866DF003F5291 /* QBGLBeautyColorMapFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4935F3200866DF003F5291 /* QBGLBeautyColorMapFilter.h */; };
 		BE4935F7200866DF003F5291 /* QBGLBeautyColorMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4935F4200866DF003F5291 /* QBGLBeautyColorMapFilter.m */; };
 		BE4935F8200866DF003F5291 /* QBGLBeautyColorMapFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4935F4200866DF003F5291 /* QBGLBeautyColorMapFilter.m */; };
+		BE4C14A2202989D600B89319 /* QBGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4C14A0202989D600B89319 /* QBGLView.h */; };
+		BE4C14A3202989D600B89319 /* QBGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C14A1202989D600B89319 /* QBGLView.m */; };
+		BE4C14A42029BBDF00B89319 /* QBGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4C14A0202989D600B89319 /* QBGLView.h */; };
+		BE4C14A52029BBE300B89319 /* QBGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C14A1202989D600B89319 /* QBGLView.m */; };
+		BE4F455C2023176B00E64B00 /* QBGLYuvFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4F455A2023176B00E64B00 /* QBGLYuvFilter.h */; };
+		BE4F455D2023176B00E64B00 /* QBGLYuvFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4F455A2023176B00E64B00 /* QBGLYuvFilter.h */; };
+		BE4F455E2023176B00E64B00 /* QBGLYuvFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4F455B2023176B00E64B00 /* QBGLYuvFilter.m */; };
+		BE4F455F2023176B00E64B00 /* QBGLYuvFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4F455B2023176B00E64B00 /* QBGLYuvFilter.m */; };
+		BE4F45622023344B00E64B00 /* QBGLBeautyEnhanceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4F45602023344B00E64B00 /* QBGLBeautyEnhanceFilter.h */; };
+		BE4F45632023344B00E64B00 /* QBGLBeautyEnhanceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4F45602023344B00E64B00 /* QBGLBeautyEnhanceFilter.h */; };
+		BE4F45642023344B00E64B00 /* QBGLBeautyEnhanceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4F45612023344B00E64B00 /* QBGLBeautyEnhanceFilter.m */; };
+		BE4F45652023344B00E64B00 /* QBGLBeautyEnhanceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4F45612023344B00E64B00 /* QBGLBeautyEnhanceFilter.m */; };
 		BE9A433F1FFDE122000A47C5 /* RKGPULogWhiteFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE9A433D1FFDE122000A47C5 /* RKGPULogWhiteFilter.h */; };
 		BE9A43401FFDE122000A47C5 /* RKGPULogWhiteFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = BE9A433D1FFDE122000A47C5 /* RKGPULogWhiteFilter.h */; };
 		BE9A43411FFDE122000A47C5 /* RKGPULogWhiteFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9A433E1FFDE122000A47C5 /* RKGPULogWhiteFilter.m */; };
@@ -1723,6 +1735,12 @@
 		BE4935EA200866A6003F5291 /* QBGLColorMapFilter+Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "QBGLColorMapFilter+Factory.m"; sourceTree = "<group>"; };
 		BE4935F3200866DF003F5291 /* QBGLBeautyColorMapFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QBGLBeautyColorMapFilter.h; sourceTree = "<group>"; };
 		BE4935F4200866DF003F5291 /* QBGLBeautyColorMapFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QBGLBeautyColorMapFilter.m; sourceTree = "<group>"; };
+		BE4C14A0202989D600B89319 /* QBGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QBGLView.h; sourceTree = "<group>"; };
+		BE4C14A1202989D600B89319 /* QBGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QBGLView.m; sourceTree = "<group>"; };
+		BE4F455A2023176B00E64B00 /* QBGLYuvFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QBGLYuvFilter.h; sourceTree = "<group>"; };
+		BE4F455B2023176B00E64B00 /* QBGLYuvFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QBGLYuvFilter.m; sourceTree = "<group>"; };
+		BE4F45602023344B00E64B00 /* QBGLBeautyEnhanceFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QBGLBeautyEnhanceFilter.h; sourceTree = "<group>"; };
+		BE4F45612023344B00E64B00 /* QBGLBeautyEnhanceFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QBGLBeautyEnhanceFilter.m; sourceTree = "<group>"; };
 		BE9A433D1FFDE122000A47C5 /* RKGPULogWhiteFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RKGPULogWhiteFilter.h; sourceTree = "<group>"; };
 		BE9A433E1FFDE122000A47C5 /* RKGPULogWhiteFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RKGPULogWhiteFilter.m; sourceTree = "<group>"; };
 		C1296A001E5072C400C992C7 /* RKGPUImageColorMapFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKGPUImageColorMapFilter.h; sourceTree = "<group>"; };
@@ -2554,6 +2572,8 @@
 				BE4933D520076CA2003F5291 /* QBGLProgram.m */,
 				BE4933CD20076CA2003F5291 /* QBGLDrawable.h */,
 				BE4933D120076CA2003F5291 /* QBGLDrawable.m */,
+				BE4C14A0202989D600B89319 /* QBGLView.h */,
+				BE4C14A1202989D600B89319 /* QBGLView.m */,
 				BE4933CE20076CA2003F5291 /* QBGLUtils.h */,
 				BE4933D220076CA2003F5291 /* QBGLUtils.m */,
 				BE4933D320076CA2003F5291 /* QBGL-Bridging-Header.h */,
@@ -2666,12 +2686,16 @@
 			children = (
 				BE4934A120076CA2003F5291 /* QBGLFilter.h */,
 				BE49349E20076CA2003F5291 /* QBGLFilter.m */,
+				BE4F455A2023176B00E64B00 /* QBGLYuvFilter.h */,
+				BE4F455B2023176B00E64B00 /* QBGLYuvFilter.m */,
 				BE4935E220086326003F5291 /* QBGLBeautyFilter.h */,
 				BE4935E120086326003F5291 /* QBGLBeautyFilter.m */,
 				BE4935E8200866A5003F5291 /* QBGLColorMapFilter.h */,
 				BE4935E7200866A5003F5291 /* QBGLColorMapFilter.m */,
 				BE4935F3200866DF003F5291 /* QBGLBeautyColorMapFilter.h */,
 				BE4935F4200866DF003F5291 /* QBGLBeautyColorMapFilter.m */,
+				BE4F45602023344B00E64B00 /* QBGLBeautyEnhanceFilter.h */,
+				BE4F45612023344B00E64B00 /* QBGLBeautyEnhanceFilter.m */,
 				BE4935E9200866A6003F5291 /* QBGLColorMapFilter+Factory.h */,
 				BE4935EA200866A6003F5291 /* QBGLColorMapFilter+Factory.m */,
 				BE49349F20076CA2003F5291 /* QBGLFilterTypes.h */,
@@ -2896,6 +2920,7 @@
 				BE4934C520076CA3003F5291 /* QBGLBlackCatFilter.h in Headers */,
 				BE49355D20076CA3003F5291 /* QBGLEarlyBirdFilter.h in Headers */,
 				C16E7D381E5349D40067DE28 /* RKGPUImageVioletFilter.h in Headers */,
+				BE4F45632023344B00E64B00 /* QBGLBeautyEnhanceFilter.h in Headers */,
 				C16E7D3E1E534A120067DE28 /* RKGPUImageMellowFilter.h in Headers */,
 				BE3B637F1FFBA19B003EA717 /* RKGPUImageEyeFilter.h in Headers */,
 				BE35EB9E1F73853100B615DF /* LFStreamLog.h in Headers */,
@@ -2974,11 +2999,13 @@
 				8495F6891DB8F1EE00542124 /* LFStreamingBuffer.h in Headers */,
 				BE4934FF20076CA3003F5291 /* QBGLAntiqueFilter.h in Headers */,
 				8495F68A1DB8F1EE00542124 /* LFStreamRTMPSocket.h in Headers */,
+				BE4C14A42029BBDF00B89319 /* QBGLView.h in Headers */,
 				BE4933C220076348003F5291 /* LFVideoCaptureInterface.h in Headers */,
 				BE49352D20076CA3003F5291 /* QBGLWaldenFilter.h in Headers */,
 				BE4934D720076CA3003F5291 /* QBGLHealthyFilter.h in Headers */,
 				8495F68B1DB8F1EE00542124 /* LFStreamSocket.h in Headers */,
 				BE49353920076CA3003F5291 /* QBGLAmaroFilter.h in Headers */,
+				BE4F455D2023176B00E64B00 /* QBGLYuvFilter.h in Headers */,
 				BE49353B20076CA3003F5291 /* QBGLInkwellFilter.h in Headers */,
 				BE49350F20076CA3003F5291 /* QBGLSutroFilter.h in Headers */,
 				8495F68C1DB8F1EE00542124 /* NSMutableArray+LFAdd.h in Headers */,
@@ -3017,6 +3044,7 @@
 				BE4933C7200768CB003F5291 /* RKVideoCapture.h in Headers */,
 				843590B51DD1FEB600811FC7 /* GPUImageMovie.h in Headers */,
 				BE4934F020076CA3003F5291 /* QBGLCalmFilter.h in Headers */,
+				BE4F455C2023176B00E64B00 /* QBGLYuvFilter.h in Headers */,
 				843590731DD1FEB600811FC7 /* GPUImageHighlightShadowTintFilter.h in Headers */,
 				843590831DD1FEB600811FC7 /* GPUImageHueFilter.h in Headers */,
 				C16E7D371E5349D40067DE28 /* RKGPUImageVioletFilter.h in Headers */,
@@ -3074,6 +3102,7 @@
 				843590431DD1FEB600811FC7 /* GPUImageDivideBlendFilter.h in Headers */,
 				BE49351E20076CA3003F5291 /* QBGLBrannanFilter.h in Headers */,
 				84D8B5D81D768B6E00752B56 /* LFLiveSession.h in Headers */,
+				BE4C14A2202989D600B89319 /* QBGLView.h in Headers */,
 				8435909B1DD1FEB600811FC7 /* GPUImageLookupFilter.h in Headers */,
 				843591431DD1FEB600811FC7 /* GPUImageFramework.h in Headers */,
 				843590A51DD1FEB600811FC7 /* GPUImageLuminosityBlendFilter.h in Headers */,
@@ -3203,6 +3232,7 @@
 				843591271DD1FEB600811FC7 /* GPUImageTransformFilter.h in Headers */,
 				843590DD1DD1FEB600811FC7 /* GPUImageRawDataInput.h in Headers */,
 				8435914F1DD1FEB600811FC7 /* amf.h in Headers */,
+				BE4F45622023344B00E64B00 /* QBGLBeautyEnhanceFilter.h in Headers */,
 				84358FFD1DD1FEB600811FC7 /* GPUImageAddBlendFilter.h in Headers */,
 				BE4935F5200866DF003F5291 /* QBGLBeautyColorMapFilter.h in Headers */,
 				843591131DD1FEB600811FC7 /* GPUImageSwirlFilter.h in Headers */,
@@ -3694,6 +3724,7 @@
 				C16E7D1C1E5348A40067DE28 /* RKGPUImageSunsetFilter.m in Sources */,
 				843591C11DD20A7F00811FC7 /* GPUImageLuminanceRangeFilter.m in Sources */,
 				C1296A041E50735D00C992C7 /* RKGPUImageColorMapFilter.m in Sources */,
+				BE4C14A52029BBE300B89319 /* QBGLView.m in Sources */,
 				843591C21DD20A7F00811FC7 /* GPUImageLuminanceThresholdFilter.m in Sources */,
 				843591C31DD20A7F00811FC7 /* GPUImageLuminosity.m in Sources */,
 				843591C41DD20A7F00811FC7 /* GPUImageLuminosityBlendFilter.m in Sources */,
@@ -3835,6 +3866,7 @@
 				8495F6941DB8F27000542124 /* LFHardwareVideoEncoder.m in Sources */,
 				C16E7D581E534B1C0067DE28 /* RKGPUImageCalmFilter.m in Sources */,
 				BE4934AD20076CA3003F5291 /* QBGLDrawable.m in Sources */,
+				BE4F45652023344B00E64B00 /* QBGLBeautyEnhanceFilter.m in Sources */,
 				8495F6951DB8F27000542124 /* LFLiveAudioConfiguration.m in Sources */,
 				8495F6961DB8F27000542124 /* LFLiveVideoConfiguration.m in Sources */,
 				8495F6971DB8F27000542124 /* LFGPUImageBeautyFilter.m in Sources */,
@@ -3842,6 +3874,7 @@
 				8495F6991DB8F27000542124 /* LFLiveSession.m in Sources */,
 				BE35EB941F72736600B615DF /* LFSimplePing.m in Sources */,
 				8495F69A1DB8F27000542124 /* LFAudioFrame.m in Sources */,
+				BE4F455F2023176B00E64B00 /* QBGLYuvFilter.m in Sources */,
 				BE49351B20076CA3003F5291 /* QBGLValenciaFilter.m in Sources */,
 				8495F69B1DB8F27000542124 /* LFFrame.m in Sources */,
 				BE35EB7A1F5D591400B615DF /* RKDataLinkedList.m in Sources */,
@@ -4003,6 +4036,7 @@
 				843591081DD1FEB600811FC7 /* GPUImageSolidColorGenerator.m in Sources */,
 				C16E7D1B1E5348A40067DE28 /* RKGPUImageSunsetFilter.m in Sources */,
 				843591181DD1FEB600811FC7 /* GPUImageTextureOutput.m in Sources */,
+				BE4C14A3202989D600B89319 /* QBGLView.m in Sources */,
 				C1296A031E5072C400C992C7 /* RKGPUImageColorMapFilter.m in Sources */,
 				843590EE1DD1FEB600811FC7 /* GPUImageSaturationFilter.m in Sources */,
 				843591141DD1FEB600811FC7 /* GPUImageSwirlFilter.m in Sources */,
@@ -4144,6 +4178,7 @@
 				843590861DD1FEB600811FC7 /* GPUImageiOSBlurFilter.m in Sources */,
 				BE388E811F821059000499F8 /* RKMultiAudioMix.m in Sources */,
 				BE4934AC20076CA3003F5291 /* QBGLDrawable.m in Sources */,
+				BE4F45642023344B00E64B00 /* QBGLBeautyEnhanceFilter.m in Sources */,
 				C16E7D571E534B1C0067DE28 /* RKGPUImageCalmFilter.m in Sources */,
 				843590E41DD1FEB600811FC7 /* GPUImageRGBDilationFilter.m in Sources */,
 				843590121DD1FEB600811FC7 /* GPUImageCannyEdgeDetectionFilter.m in Sources */,
@@ -4151,6 +4186,7 @@
 				843590CC1DD1FEB600811FC7 /* GPUImagePerlinNoiseFilter.m in Sources */,
 				BE35EB931F72736600B615DF /* LFSimplePing.m in Sources */,
 				8435906C1DD1FEB600811FC7 /* GPUImageHardLightBlendFilter.m in Sources */,
+				BE4F455E2023176B00E64B00 /* QBGLYuvFilter.m in Sources */,
 				BE49351A20076CA3003F5291 /* QBGLValenciaFilter.m in Sources */,
 				843590321DD1FEB600811FC7 /* GPUImageCropFilter.m in Sources */,
 				843590241DD1FEB600811FC7 /* GPUImageColorInvertFilter.m in Sources */,

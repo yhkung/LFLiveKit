@@ -8,7 +8,6 @@
 
 #import "QBGLColorMapFilter.h"
 #import "QBGLDrawable.h"
-#import "QBGLUtils.h"
 #import "QBGLProgram.h"
 
 char * const kQBColorMapFilterVertex;
@@ -104,13 +103,14 @@ char * const kQBColorMapFilterVertex = STRING
  attribute vec4 position;
  attribute vec4 inputTextureCoordinate;
  
- uniform mat4 transformMatrix;
+ //uniform mat4 transformMatrix;
  
  varying vec2 textureCoordinate;
  
  void main()
  {
-     gl_Position = position * transformMatrix;
+     //gl_Position = position * transformMatrix;
+     gl_Position = position;
      textureCoordinate = inputTextureCoordinate.xy;
  }
 );
@@ -121,8 +121,7 @@ char * const kQBColorMapFilterFragment = STRING
  
  varying highp vec2 textureCoordinate;
  
- uniform sampler2D yTexture;
- uniform sampler2D uvTexture;
+ uniform sampler2D inputImageTexture;
  
  uniform sampler2D colorMapTexture; // mandatory
  uniform sampler2D overlayTexture1; // optional
@@ -131,17 +130,6 @@ char * const kQBColorMapFilterFragment = STRING
  uniform float filterMixPercentage;
  uniform int overlay1Enabled;
  uniform int overlay2Enabled;
- 
- const mat3 yuv2rgbMatrix = mat3(1.0, 1.0, 1.0,
-                                 0.0, -0.343, 1.765,
-                                 1.4, -0.711, 0.0);
- 
- vec3 rgbFromYuv(sampler2D yTexture, sampler2D uvTexture, vec2 textureCoordinate) {
-     float y = texture2D(yTexture, textureCoordinate).r;
-     float u = texture2D(uvTexture, textureCoordinate).r - 0.5;
-     float v = texture2D(uvTexture, textureCoordinate).a - 0.5;
-     return yuv2rgbMatrix * vec3(y, u, v);
- }
  
  vec3 applyColorMap(vec3 inputTexture, sampler2D colorMap) {
      float size = 33.0;
@@ -182,7 +170,7 @@ char * const kQBColorMapFilterFragment = STRING
  
  void main()
  {
-     vec3 output_result = rgbFromYuv(yTexture, uvTexture, textureCoordinate).rgb;
+     vec3 output_result = texture2D(inputImageTexture, textureCoordinate).rgb;
      
      vec3 filter_result = applyColorMap(output_result, colorMapTexture);
      

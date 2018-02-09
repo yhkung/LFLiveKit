@@ -93,6 +93,8 @@ typedef NS_ENUM(NSUInteger, LFAudioMixVolume) {
 /** The beautyFace control capture shader filter empty or beautiy */
 @property (nonatomic, assign) BOOL beautyFace;
 
+@property (nonatomic, assign) BOOL beautyFaceEnhanced;
+
 /** The torch control camera zoom scale default 1.0, between 1.0 ~ 3.0 */
 @property (nonatomic, assign) CGFloat zoomScale;
 
@@ -148,8 +150,6 @@ typedef NS_ENUM(NSUInteger, LFAudioMixVolume) {
 
 @property (nonatomic, assign) BOOL gpuimageOn;
 
-@property (nonatomic, assign) BOOL gpuimageAdvanceBeautyEnabled;
-
 // 17 log
 @property (nonatomic, nullable) NSString *liveId;
 @property (nonatomic, nullable) NSString *provider;
@@ -160,7 +160,7 @@ typedef NS_ENUM(NSUInteger, LFAudioMixVolume) {
 @property (nonatomic) double latitude;
 @property (nonatomic, readonly, nonnull) NSDictionary *logInfo;
 
-@property (strong, nonatomic, readonly) EAGLContext *glContext;
+@property (strong, nonatomic, readonly, nullable) EAGLContext *glContext;
 
 #pragma mark - Initializer
 ///=============================================================================
@@ -186,7 +186,7 @@ typedef NS_ENUM(NSUInteger, LFAudioMixVolume) {
 - (nullable instancetype)initWithAudioConfiguration:(nullable LFLiveAudioConfiguration *)audioConfiguration
                                  videoConfiguration:(nullable LFLiveVideoConfiguration *)videoConfiguration
                                         captureType:(LFLiveCaptureTypeMask)captureType
-                                        eaglContext:(EAGLContext *)glContext NS_DESIGNATED_INITIALIZER;
+                                        eaglContext:(nullable EAGLContext *)glContext NS_DESIGNATED_INITIALIZER;
 
 /** The start stream .*/
 - (void)startLive:(nonnull LFLiveStreamInfo *)streamInfo;

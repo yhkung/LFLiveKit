@@ -7,7 +7,6 @@
 //
 
 #import "QBGLBeautyColorMapFilter.h"
-#import "QBGLUtils.h"
 #import "QBGLProgram.h"
 #import "QBGLDrawable.h"
 
@@ -16,7 +15,7 @@ char *const kQBBeautyColorMapFilterVertex = STRING
  attribute vec4 position;
  attribute vec4 inputTextureCoordinate;
  
- uniform mat4 transformMatrix;
+ //uniform mat4 transformMatrix;
 // uniform float sharpness;
  
  uniform vec2 singleStepOffset;
@@ -29,8 +28,8 @@ char *const kQBBeautyColorMapFilterVertex = STRING
 // varying float sharpEdgeMultiplier;
  
  void main() {
-     gl_Position = position * transformMatrix;
-     
+     //gl_Position = position * transformMatrix;
+     gl_Position = position;
      textureCoordinate = inputTextureCoordinate.xy;
      
      //     blurCoordinates[0] = textureCoordinate.xy + singleStepOffset * vec2(0.0, -10.0);

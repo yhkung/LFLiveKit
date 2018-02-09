@@ -95,7 +95,7 @@
 - (nullable instancetype)initWithAudioConfiguration:(nullable LFLiveAudioConfiguration *)audioConfiguration
                                  videoConfiguration:(nullable LFLiveVideoConfiguration *)videoConfiguration
                                         captureType:(LFLiveCaptureTypeMask)captureType
-                                        eaglContext:(EAGLContext *)glContext {
+                                        eaglContext:(nullable EAGLContext *)glContext {
     if ((captureType & LFLiveCaptureMaskAudio || captureType & LFLiveInputMaskAudio) && !audioConfiguration)
         @throw [NSException exceptionWithName:@"LFLiveSession init error" reason:@"audioConfiguration is nil " userInfo:nil];
     if ((captureType & LFLiveCaptureMaskVideo || captureType & LFLiveInputMaskVideo) && !videoConfiguration)
@@ -427,6 +427,10 @@
     [self didChangeValueForKey:@"beautyFace"];
 }
 
+- (void)setBeautyFaceEnhanced:(BOOL)beautyFaceEnhanced {
+    self.videoCaptureSource.beautyFaceEnhanced = beautyFaceEnhanced;
+}
+
 - (BOOL)saveLocalVideo{
     return self.videoCaptureSource.saveLocalVideo;
 }
@@ -446,6 +450,10 @@
 
 - (BOOL)beautyFace {
     return self.videoCaptureSource.beautyFace;
+}
+
+- (BOOL)beautyFaceEnhanced {
+    return self.videoCaptureSource.beautyFaceEnhanced;
 }
 
 - (void)setZoomScale:(CGFloat)zoomScale {
@@ -525,7 +533,6 @@
         if(self.captureType & LFLiveCaptureMaskVideo){
             if (_gpuimageOn) {
                 _videoCaptureSource = [[LFVideoCapture alloc] initWithVideoConfiguration:_videoConfiguration];
-                ((LFVideoCapture*)_videoCaptureSource).useAdvanceBeauty = _gpuimageAdvanceBeautyEnabled;
             } else {
                 _videoCaptureSource = [[RKVideoCapture alloc] initWithVideoConfiguration:_videoConfiguration eaglContext:_glContext];
             }

@@ -92,6 +92,7 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
 @synthesize delegate = _delegate;
 @synthesize running = _running;
 @synthesize beautyFace = _beautyFace;
+@synthesize beautyFaceEnhanced = _beautyFaceEnhanced;
 @synthesize torch = _torch;
 @synthesize mirror = _mirror;
 @synthesize zoomScale = _zoomScale;
@@ -286,6 +287,11 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
     [self reloadFilter];
 }
 
+- (void)setBeautyFaceEnhanced:(BOOL)beautyFaceEnhanced {
+    _beautyFaceEnhanced = beautyFaceEnhanced;
+    [self reloadFilter];
+}
+
 - (void)setZoomScale:(CGFloat)zoomScale {
     if (self.videoCamera && self.videoCamera.inputCamera) {
         AVCaptureDevice *device = (AVCaptureDevice *)self.videoCamera.inputCamera;
@@ -399,7 +405,7 @@ static NSString * const kColorFilterOverlayKey = @"overlay";
 
     // 美肌
     if (self.beautyFace) {
-        if (_useAdvanceBeauty) {
+        if (self.beautyFaceEnhanced) {
             [self applyAdvanceBeautyFilters:filterGroup];
         } else {
             [self applyBeautyFilters:filterGroup];
