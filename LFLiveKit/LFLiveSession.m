@@ -572,8 +572,14 @@
     [self willChangeValueForKey:@"running"];
     _running = running;
     [self didChangeValueForKey:@"running"];
-    self.videoCaptureSource.running = _running;
-    self.audioCaptureSource.running = _running;
+
+    if (self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) {
+        self.videoCaptureSource.running = _running;
+    }
+
+    if (self.captureType & LFLiveCaptureMaskAudio || self.captureType & LFLiveInputMaskAudio) {
+        self.audioCaptureSource.running = _running;
+    }
 }
 
 - (void)setPreView:(UIView *)preView {
