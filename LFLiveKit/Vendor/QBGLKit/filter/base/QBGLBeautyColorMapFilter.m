@@ -65,6 +65,18 @@ char * const kQBBeautyColorMapFilterFragment = STRING
                                  0.0, -0.343, 1.765,
                                  1.4, -0.711, 0.0);
  
+ /* Snow Parameters */
+ uniform float iTime;
+ uniform bool iSnowing;
+ uniform int iLayers;
+ uniform float iViewPortHeight;
+ const float DEPTH1 = .3;
+ const float WIDTH1 = .1;
+ const float SPEED1 = .6;
+ const float DEPTH2 = .1;
+ const float WIDTH2 = .3;
+ const float SPEED2 = .1;
+
  vec3 rgbFromYuv(sampler2D yTexture, sampler2D uvTexture, vec2 textureCoordinate) {
      float y = texture2D(yTexture, textureCoordinate).r;
      float u = texture2D(uvTexture, textureCoordinate).r - 0.5;
@@ -115,6 +127,36 @@ char * const kQBBeautyColorMapFilterFragment = STRING
          return 1.-2.*(1.-a)*(1.-b);
      
      return 0.;
+ }
+ 
+ float snowing(in vec2 uv, in vec2 fragCoord ) {
+     const mat3 p = mat3(13.323122,23.5112,21.71123,21.1212,28.7312,11.9312,21.8112,14.7212,61.3934);
+     //   vec2 mp = fragCoord.xy / vec2(360.0, 640.0);//iMouse.xy / iResolution.xy;
+     vec2 mp = vec2(0.0);
+     uv.x += mp.x*4.0;
+     mp.y *= 0.25;
+     float depth = smoothstep(DEPTH1, DEPTH2, mp.y);
+     float width = smoothstep(WIDTH1, WIDTH2, mp.y);
+     float speed = smoothstep(SPEED1, SPEED2, mp.y);
+     float acc = 0.0;
+     float dof = 5.0 * sin(iTime * 0.1);
+     for (int i=0; i < iLayers; i++) {
+         float fi = float(i);
+         vec2 q = uv * (1.0 + fi*depth);
+         float w = width * mod(fi*7.238917,1.0)-.05*sin(iTime*2.+fi);
+         q += vec2(q.y*w, speed*iTime / (1.0+fi*depth*0.03));
+         vec3 n = vec3(floor(q),31.189+fi);
+         vec3 m = floor(n)*0.00001 + fract(n);
+         vec3 mp = (31415.9+m) / fract(p*m);
+         vec3 r = fract(mp);
+         vec2 s = abs(mod(q,1.0) -0.5 +0.9*r.xy -0.45);
+         s += 0.01*abs(2.0*fract(10.*q.yx)-1.);
+         float d = 0.6*max(s.x-s.y,s.x+s.y)+max(s.x,s.y)-.01;
+         float edge = 0.05 +0.05*min(.5*abs(fi-5.-dof),1.);
+         acc += smoothstep(edge,-edge,d)*(r.x/(1.+.02*fi*depth));
+     }
+     
+     return acc;
  }
  
  void main(){
@@ -224,14 +266,33 @@ char * const kQBBeautyColorMapFilterFragment = STRING
      }
      
      filter_result = mix(beautyColor, filter_result, filterMixPercentage);
+     
+     vec4 tempColor = vec4(filter_result, 1.0);
+     
+     if (iSnowing) {
+         vec2 transformCoord = vec2(gl_FragCoord.x, iViewPortHeight - gl_FragCoord.y);
+         vec2 uv = transformCoord.xy / iViewPortHeight;
+         float snowOut = snowing(uv,gl_FragCoord.xy);
+         float move = iTime * 0.14;
+         
+         if (move > 1.0) {
+             move = 1.0;
+         }
+         
+         if (textureCoordinate.x <= move) {
+             float alpha = ((move - textureCoordinate.x)/(move*0.35));
+             tempColor += vec4(vec3(snowOut *alpha), 1.0);
+         }
+     }
+
      vec4 animationColor = texture2D(animationTexture, animationCoordinate);
      if (enableAnimationView == 1) {
-         filter_result.r = animationColor.r + filter_result.r * (1.0 - animationColor.a);
-         filter_result.g = animationColor.g + filter_result.g * (1.0 - animationColor.a);
-         filter_result.b = animationColor.b + filter_result.b * (1.0 - animationColor.a);
+         filter_result.r = animationColor.r + tempColor.r * (1.0 - animationColor.a);
+         filter_result.g = animationColor.g + tempColor.g * (1.0 - animationColor.a);
+         filter_result.b = animationColor.b + tempColor.b * (1.0 - animationColor.a);
          gl_FragColor = vec4(filter_result, 1.0);
      } else {
-         gl_FragColor = vec4(filter_result, 1.0);
+         gl_FragColor = tempColor;
      }
  }
  

@@ -72,13 +72,24 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
 /** callback inner audio data */
 - (void)liveSession:(nullable LFLiveSession *)session audioDataBeforeMixing:(nullable NSData *)audioData;
 
-- (nullable CVPixelBufferRef)liveSession:(nullable LFLiveSession *)session willOutputVideoFrame:(nonnull CVPixelBufferRef)pixelBuffer atTime:(CMTime)time customTime:(uint64_t)customTime;
+- (nullable CVPixelBufferRef)liveSession:(nullable LFLiveSession *)session willOutputVideoFrame:(nonnull CVPixelBufferRef)pixelBuffer atTime:(CMTime)time customTime:(uint64_t)customTime didUpdateVideConfiguration:(BOOL)didUpdateVideConfiguration;
 - (void)liveSession:(nullable LFLiveSession *)session rawCameraVideoFrame:(nonnull CVPixelBufferRef)pixelBuffer atTime:(CMTime)time;
 - (void)liveSession:(nullable LFLiveSession *)session willOutputAudioFrame:(unsigned char * _Nullable)data samples:(NSUInteger)samples customTime:(uint64_t)customTime;
+- (void)liveSession:(nullable LFLiveSession *)session videoEncoderIsMalfunction:(BOOL)isMalfunction;
+- (void)liveSessionDidResetVideoEncoder:(nullable LFLiveSession *)session;
+- (void)liveSession:(nullable LFLiveSession *)session frameConsumptionIsStopped:(BOOL)isFrameConsumptionStopped;
+- (void)liveSessionDidStartReconnect:(nullable LFLiveSession *)session pushUrl:(NSString *_Nullable)pushUrl;
+- (void)liveSession:(nullable LFLiveSession *)session didOccurRTMPErrorWithErrorCode:(int)errorCode errorMessage:(NSString *_Nullable)errorMessage;
+
+- (NSArray<NSDictionary *> *)boxesRenderInfosForLiveSession:(nullable LFLiveSession *)session;
+- (NSArray<NSDictionary *> *)gameRenderInfosForLiveSession:(nullable LFLiveSession *)session;
+- (NSArray<NSDictionary *> *)painterRenderInfosForLiveSession:(nullable LFLiveSession *)session;
+- (BOOL)painterShouldRenderForLiveSession:(nullable LFLiveSession *)session;
 
 @end
 
 @class LFLiveStreamInfo;
+@class LFLiveFeatureConfig;
 
 @interface LFLiveSession : NSObject
 
@@ -159,6 +170,12 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
 
 @property (nonatomic, assign) BOOL gpuimageAdvanceBeautyEnabled;
 
+/** for SEL */
+@property (nonatomic, assign) BOOL shouldMonitorPushModule;
+
+/** LiveFeatureConfig */
+@property (nonatomic, strong, readonly, nullable) LFLiveFeatureConfig *liveFeatureConfig;
+
 /** The instance is for broadcast extension usage */
 @property (nonatomic, readonly) BOOL isReplayKitBroadcast;
 
@@ -204,6 +221,12 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
                                         captureType:(LFLiveCaptureTypeMask)captureType
                                         eaglContext:(EAGLContext *_Nullable)glContext NS_DESIGNATED_INITIALIZER;
 
+- (nullable instancetype)initWithAudioConfiguration:(nullable LFLiveAudioConfiguration *)audioConfiguration
+                                 videoConfiguration:(nullable LFLiveVideoConfiguration *)videoConfiguration
+                                  liveFeatureConfig:(LFLiveFeatureConfig *)liveFeatureConfig
+                                        captureType:(LFLiveCaptureTypeMask)captureType
+                                        eaglContext:(EAGLContext *)glContext;
+
 /** The initializer for broadcast extension. */
 - (nullable instancetype)initForReplayKitBroadcast;
 
@@ -211,7 +234,7 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
 - (void)startLive:(nonnull LFLiveStreamInfo *)streamInfo;
 
 /** Update stream url */
-- (void)updateStreamURL:(nonnull NSString *)url;
+- (BOOL)updateStreamURL:(nonnull NSString *)url;
 
 /** 停止將採集到的video/audio data做encode, 沒有encoded的data就不會推送到rtmp */
 - (void)pauseLive;
@@ -242,6 +265,12 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
 /** Switch to target color filter. */
 - (void)setTargetColorFilter:(NSInteger)targetIndex;
 
+/** add Snow Effect to filter. */
+- (void)startSnowEffect;
+
+/** remove Snow Effect to filter. */
+- (void)stopSnowEffect;
+
 // volume is LFAudioMixVolumeNormal
 - (void)playSound:(nonnull NSURL *)soundUrl;
 
@@ -270,5 +299,7 @@ typedef NS_ENUM(NSUInteger, RKReplayKitSampleType) {
 
 /** Update video bitrate with max min range */
 - (BOOL)updateVideoBitRateWithMaxBitRate:(NSUInteger)maxBitRate minBitRate:(NSUInteger)minBitRate;
+/** Update videoConfiguration */
+- (void)updateVideoConfiguration:(LFLiveVideoConfiguration *)videoConfiguration;
 
 @end

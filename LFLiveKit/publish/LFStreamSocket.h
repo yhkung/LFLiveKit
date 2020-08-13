@@ -25,6 +25,9 @@
 @optional
 /** callback debugInfo */
 - (void)socketDebug:(nullable id <LFStreamSocket>)socket debugInfo:(nullable LFLiveDebug *)debugInfo;
+- (void)socketStartReconnect:(nullable id <LFStreamSocket>)socket pushUrl:(NSString *)pushUrl;
+- (void)socketDidOccurRTMPError:(nullable id <LFStreamSocket>)socket errorCode:(int)errorCode errorMessage:(NSString *)errorMessage;
+
 @end
 
 @protocol LFStreamSocket <NSObject>
@@ -36,6 +39,6 @@
 - (void)setDelegate:(nullable id <LFStreamSocketDelegate>)delegate;
 @optional
 - (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream;
-- (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream reconnectInterval:(NSInteger)reconnectInterval reconnectCount:(NSInteger)reconnectCount;
+- (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream reconnectInterval:(NSInteger)reconnectInterval reconnectCount:(NSInteger)reconnectCount ensureAVKeyFrameSentFirst:(BOOL)ensureAVKeyFrameSentFirst;
 - (void)streamURLChanged:(NSString *)url;
 @end

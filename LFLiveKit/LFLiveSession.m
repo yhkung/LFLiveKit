@@ -19,9 +19,13 @@
 #import "LFStreamLog.h"
 #import "RKVideoCapture.h"
 #import "RKAudioMix.h"
+#import "RKPushModuleMonitor.h"
 #import "RKReplayKitCapture.h"
+#import "LFLiveFeatureConfig.h"
 
-@interface LFLiveSession ()<LFAudioCaptureDelegate, LFVideoCaptureInterfaceDelegate, LFAudioEncodingDelegate, LFVideoEncodingDelegate, LFStreamSocketDelegate, RKReplayKitCaptureDelegate>
+static const NSTimeInterval LFOutputDebugInfoInterval = 10.0;
+
+@interface LFLiveSession ()<LFAudioCaptureDelegate, LFVideoCaptureInterfaceDelegate, LFAudioEncodingDelegate, LFVideoEncodingDelegate, LFStreamSocketDelegate, RKReplayKitCaptureDelegate, RKPushModuleMonitorDelegate>
 
 /// 音频配置
 @property (nonatomic, strong) LFLiveAudioConfiguration *audioConfiguration;
@@ -58,6 +62,10 @@
 /// 时间戳锁
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 
+// 用來監控pushModule是否正常執行
+@property (nonatomic, strong) RKPushModuleMonitor *pushModuleMonitor;
+
+@property (nonatomic, assign) NSTimeInterval lastOutputDebugInfoTime;
 
 @end
 
@@ -103,17 +111,31 @@
                                  videoConfiguration:(nullable LFLiveVideoConfiguration *)videoConfiguration
                                         captureType:(LFLiveCaptureTypeMask)captureType
                                         eaglContext:(EAGLContext *)glContext {
+    return [self initWithAudioConfiguration:audioConfiguration
+                         videoConfiguration:videoConfiguration
+                          liveFeatureConfig:nil
+                                captureType:captureType
+                                eaglContext:nil];
+}
+
+- (nullable instancetype)initWithAudioConfiguration:(nullable LFLiveAudioConfiguration *)audioConfiguration
+                                 videoConfiguration:(nullable LFLiveVideoConfiguration *)videoConfiguration
+                                  liveFeatureConfig:(LFLiveFeatureConfig *)liveFeatureConfig
+                                        captureType:(LFLiveCaptureTypeMask)captureType
+                                        eaglContext:(EAGLContext *)glContext {
     if ((captureType & LFLiveCaptureMaskAudio || captureType & LFLiveInputMaskAudio) && !audioConfiguration)
         @throw [NSException exceptionWithName:@"LFLiveSession init error" reason:@"audioConfiguration is nil " userInfo:nil];
     if ((captureType & LFLiveCaptureMaskVideo || captureType & LFLiveInputMaskVideo) && !videoConfiguration)
         @throw [NSException exceptionWithName:@"LFLiveSession init error" reason:@"videoConfiguration is nil " userInfo:nil];
     if (self = [super init]) {
+        _liveFeatureConfig = liveFeatureConfig;
         _audioConfiguration = audioConfiguration;
         _videoConfiguration = videoConfiguration;
         _adaptiveBitrate = NO;
         _captureType = captureType;
         _glContext = glContext;
     }
+    
     return self;
 }
 
@@ -131,6 +153,7 @@
 }
 
 #pragma mark -- CustomMethod
+
 - (void)startLive:(LFLiveStreamInfo *)streamInfo {
     if (!streamInfo) return;
     _streamInfo = streamInfo;
@@ -150,11 +173,17 @@
                                         @"vbr": @(videoBitRate)}];
     
     [self.socket start];
+    
+    if (self.shouldMonitorPushModule) {
+        self.pushModuleMonitor = [[RKPushModuleMonitor alloc] init];
+        self.pushModuleMonitor.delegate = self;
+        [self.pushModuleMonitor startMonitor];
+    }
 }
 
-- (void)updateStreamURL:(nonnull NSString *)url {
+- (BOOL)updateStreamURL:(nonnull NSString *)url {
     if ([_streamInfo.url isEqualToString:url] || !_socket || ![_socket respondsToSelector:@selector(streamURLChanged:)]) {
-        return;
+        return NO;
     }
     
     _streamInfo.url = url;
@@ -164,6 +193,8 @@
     }
     
     [_socket streamURLChanged:url];
+    
+    return YES;
 }
 
 - (void)pauseLive {
@@ -195,6 +226,7 @@
     self.uploading = NO;
     [self.socket stop];
     self.socket = nil;
+    self.pushModuleMonitor = nil;
 }
 
 - (void)pushVideo:(nullable CVPixelBufferRef)pixelBuffer {
@@ -248,6 +280,18 @@
 
 - (void)nextColorFilter {
     [self.videoCaptureSource nextColorFilter];
+}
+
+- (void)startSnowEffect {
+    if ([_videoCaptureSource isKindOfClass:[RKVideoCapture class]]) {
+        [((RKVideoCapture *)_videoCaptureSource) startSnowEffect];
+    }
+}
+
+- (void)stopSnowEffect {
+    if ([_videoCaptureSource isKindOfClass:[RKVideoCapture class]]) {
+        [((RKVideoCapture *)_videoCaptureSource) stopSnowEffect];
+    }
 }
 
 - (void)setTargetColorFilter:(NSInteger)targetIndex {
@@ -309,6 +353,16 @@
     [self.audioCaptureSource stopMixAllSounds];
 }
 
+- (void)updateVideoConfiguration:(LFLiveVideoConfiguration *)videoConfiguration {
+    if (!_videoConfiguration || !_videoEncoder) {
+        return;
+    }
+    
+    if ([self.videoCaptureSource respondsToSelector:@selector(setNextVideoConfiguration:)]) {
+        ((RKVideoCapture *)self.videoCaptureSource).nextVideoConfiguration = videoConfiguration;
+    }
+}
+
 - (BOOL)updateVideoBitRateWithMaxBitRate:(NSUInteger)maxBitRate minBitRate:(NSUInteger)minBitRate {
     if (!self.videoConfiguration || !self.videoEncoder ||
         (self.videoConfiguration.videoMinBitRate == minBitRate && self.videoConfiguration.videoMaxBitRate == maxBitRate)) {
@@ -354,6 +408,20 @@
     [self.videoEncoder reset];
 }
 
+- (BOOL)shouldOutputDebugInfo {
+    if (!self.showDebugInfo) {
+        return NO;
+    }
+    
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    if ((now - self.lastOutputDebugInfoTime - LFOutputDebugInfoInterval) > 0) {
+        self.lastOutputDebugInfoTime = now;
+        return YES;
+    }
+    
+    return NO;
+}
+
 #pragma mark -- Audio Capture Delegate
 
 - (void)captureOutput:(nullable LFAudioCapture *)capture audioBeforeSideMixing:(nullable NSData *)data {
@@ -375,11 +443,51 @@
 
 #pragma mark - Video Capture Delegate
 
-- (void)captureOutput:(nullable id<LFVideoCaptureInterface>)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer atTime:(CMTime)time {
-    if ([self.delegate respondsToSelector:@selector(liveSession:willOutputVideoFrame:atTime:customTime:)]) {
-        pixelBuffer = [self.delegate liveSession:self willOutputVideoFrame:pixelBuffer atTime:time customTime:NOW];
+- (NSArray<NSDictionary *> *)boxesRenderInfosForVideoCapture:(id<LFVideoCaptureInterface>)capture {
+    if ([self.delegate respondsToSelector:@selector(boxesRenderInfosForLiveSession:)]) {
+        return [self.delegate boxesRenderInfosForLiveSession:self];
     }
-    if (self.uploading && !self.stopEncodingVideoAudioData) {
+    
+    return nil;
+}
+
+- (NSArray<NSDictionary *> *)gameRenderInfosForVideoCapture:(id<LFVideoCaptureInterface>)capture {
+    if ([self.delegate respondsToSelector:@selector(gameRenderInfosForLiveSession:)]) {
+        return [self.delegate gameRenderInfosForLiveSession:self];
+    }
+    
+    return nil;
+}
+
+- (NSArray<NSDictionary *> *)painterRenderInfosForVideoCapture:(id<LFVideoCaptureInterface>)capture {
+    if ([self.delegate respondsToSelector:@selector(painterRenderInfosForLiveSession:)]) {
+        return [self.delegate painterRenderInfosForLiveSession:self];
+    }
+    
+    return nil;
+}
+
+- (BOOL)painterShouldRenderForVideoCapture:(id<LFVideoCaptureInterface>)capture {
+    if ([self.delegate respondsToSelector:@selector(painterShouldRenderForLiveSession:)]) {
+        return [self.delegate painterShouldRenderForLiveSession:self];
+    }
+    
+    return NO;
+}
+
+- (void)captureOutput:(nullable id<LFVideoCaptureInterface>)capture
+          pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer
+               atTime:(CMTime)time
+didUpdateVideoConfiguration:(BOOL)didUpdateVideoConfiguration {
+    if (didUpdateVideoConfiguration && [self.videoEncoder respondsToSelector:@selector(reset)]) {
+        [self.videoEncoder reset];
+    }
+
+    if ([self.delegate respondsToSelector:@selector(liveSession:willOutputVideoFrame:atTime:customTime:didUpdateVideConfiguration:)]) {
+        pixelBuffer = [self.delegate liveSession:self willOutputVideoFrame:pixelBuffer atTime:time customTime:NOW didUpdateVideConfiguration:didUpdateVideoConfiguration];
+    }
+    
+    if (self.uploading && !self.stopEncodingVideoAudioData && !didUpdateVideoConfiguration) {
         [self.videoEncoder encodeVideoData:pixelBuffer timeStamp:NOW];
     }
 }
@@ -405,9 +513,12 @@
 }
 
 - (void)videoEncoder:(nullable id<LFVideoEncoding>)encoder videoFrame:(nullable LFVideoFrame *)frame {
+    [self.pushModuleMonitor updateVideoEncodeDate];
+    
     if (!self.uploading) {
         return;
     }
+    
     if (self.isReplayKitBroadcast) {
         if (!_videoFrameQueue) {
             _videoFrameQueue = [NSMutableArray new];
@@ -469,7 +580,8 @@
 
 - (void)socketDebug:(nullable id<LFStreamSocket>)socket debugInfo:(nullable LFLiveDebug *)debugInfo {
     self.debugInfo = debugInfo;
-    if (self.showDebugInfo) {
+    [self.pushModuleMonitor updateFrameConsumptionDate];
+    if ([self shouldOutputDebugInfo]) {
         __weak typeof(self) wSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([wSelf.delegate respondsToSelector:@selector(liveSession:debugInfo:)]) {
@@ -501,6 +613,18 @@
                                                 @"vbr": @(targetBitrate)
                                                 }];
         }
+    }
+}
+
+- (void)socketStartReconnect:(id<LFStreamSocket>)socket pushUrl:(NSString *)pushUrl {
+    if ([self.delegate respondsToSelector:@selector(liveSessionDidStartReconnect:pushUrl:)]) {
+        [self.delegate liveSessionDidStartReconnect:self pushUrl:pushUrl];
+    }
+}
+
+- (void)socketDidOccurRTMPError:(id<LFStreamSocket>)socket errorCode:(int)errorCode errorMessage:(NSString *)errorMessage {
+    if ([self.delegate respondsToSelector:@selector(liveSession:didOccurRTMPErrorWithErrorCode:errorMessage:)]) {
+        [self.delegate liveSession:self didOccurRTMPErrorWithErrorCode:errorCode errorMessage:errorMessage];
     }
 }
 
@@ -572,14 +696,8 @@
     [self willChangeValueForKey:@"running"];
     _running = running;
     [self didChangeValueForKey:@"running"];
-
-    if (self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) {
-        self.videoCaptureSource.running = _running;
-    }
-
-    if (self.captureType & LFLiveCaptureMaskAudio || self.captureType & LFLiveInputMaskAudio) {
-        self.audioCaptureSource.running = _running;
-    }
+    self.videoCaptureSource.running = _running;
+    self.audioCaptureSource.running = _running;
 }
 
 - (void)setPreView:(UIView *)preView {
@@ -700,7 +818,7 @@
                 _videoCaptureSource = [[LFVideoCapture alloc] initWithVideoConfiguration:_videoConfiguration];
                 ((LFVideoCapture*)_videoCaptureSource).useAdvanceBeauty = _gpuimageAdvanceBeautyEnabled;
             } else {
-                _videoCaptureSource = [[RKVideoCapture alloc] initWithVideoConfiguration:_videoConfiguration eaglContext:_glContext];
+                _videoCaptureSource = [[RKVideoCapture alloc] initWithVideoConfiguration:_videoConfiguration eaglContext:_glContext liveFeatureConfig:_liveFeatureConfig];
             }
             _videoCaptureSource.delegate = self;
         }
@@ -752,7 +870,7 @@
 
 - (id<LFStreamSocket>)socket {
     if (!_socket) {
-        _socket = [[LFStreamRTMPSocket alloc] initWithStream:self.streamInfo reconnectInterval:self.reconnectInterval reconnectCount:self.reconnectCount];
+        _socket = [[LFStreamRTMPSocket alloc] initWithStream:self.streamInfo reconnectInterval:self.reconnectInterval reconnectCount:self.reconnectCount ensureAVKeyFrameSentFirst:_liveFeatureConfig.ensureAVKeyFrameSentFirst];
         [_socket setDelegate:self];
     }
     return _socket;
@@ -788,6 +906,21 @@
         else  return NO;
     }else{
         return YES;
+    }
+}
+
+
+#pragma mark - RKPushModuleMonitor Delegate
+
+- (void)pushModuleMonitor:(RKPushModuleMonitor *)pushModuleMonitor isVideoEncodeMalfunction:(BOOL)isVideoEncodeMalfunction {
+    if ([self.delegate respondsToSelector:@selector(liveSession:videoEncoderIsMalfunction:)]) {
+        [self.delegate liveSession:self videoEncoderIsMalfunction:isVideoEncodeMalfunction];
+    }
+}
+
+- (void)pushModuleMonitor:(RKPushModuleMonitor *)pushModuleMonitor isFrameConsumptionStopped:(BOOL)isFrameConsumptionStopped {
+    if ([self.delegate respondsToSelector:@selector(liveSession:frameConsumptionIsStopped:)]) {
+        [self.delegate liveSession:self frameConsumptionIsStopped:isFrameConsumptionStopped];
     }
 }
 
