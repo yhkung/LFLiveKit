@@ -498,6 +498,13 @@ didUpdateVideoConfiguration:(BOOL)didUpdateVideoConfiguration {
     }
 }
 
+- (CVPixelBufferRef)captureOutput:(id<LFVideoCaptureInterface>)capture onPreProcessPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    if ([self.delegate respondsToSelector:@selector(liveSession:onPreProcessPixelBuffer:)]) {
+        return [self.delegate liveSession:self onPreProcessPixelBuffer:pixelBuffer];
+    }
+    return pixelBuffer;
+}
+
 #pragma mark -- EncoderDelegate
 - (void)audioEncoder:(nullable id<LFAudioEncoding>)encoder audioFrame:(nullable LFAudioFrame *)frame {
     if (!self.uploading) {

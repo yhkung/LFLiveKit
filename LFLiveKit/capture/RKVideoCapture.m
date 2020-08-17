@@ -375,6 +375,10 @@
         [self.delegate captureRawCamera:self pixelBuffer:pixelBuffer atTime:time];
     }
     
+    if ([self.delegate respondsToSelector:@selector(captureOutput:onPreProcessPixelBuffer:)]) {
+        pixelBuffer = [self.delegate captureOutput:self onPreProcessPixelBuffer:pixelBuffer];
+    }
+    
     [self.glContext updatePropertiesForRender];
     
     if (self.hasSnowEffect) {

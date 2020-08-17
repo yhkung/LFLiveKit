@@ -131,6 +131,10 @@ typedef NS_ENUM(NSInteger, RKColorFilter) {
           pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer
                atTime:(CMTime)time
 didUpdateVideoConfiguration:(BOOL)didUpdateVideoConfiguration;
+
+- (CVPixelBufferRef)captureOutput:(nullable id<LFVideoCaptureInterface>)capture
+          onPreProcessPixelBuffer:(CVPixelBufferRef)pixelBuffer;
+
 - (void)captureOutput:(nullable id<LFVideoCaptureInterface>)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer atTime:(CMTime)time;
 - (void)captureRawCamera:(nullable id<LFVideoCaptureInterface>)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer atTime:(CMTime)time;
 
