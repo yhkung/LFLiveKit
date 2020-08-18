@@ -182,7 +182,7 @@
     NSString *avSessionPreset = nil;
     switch (self.sessionPreset) {
     case LFCaptureSessionPreset360x640:{
-        avSessionPreset = AVCaptureSessionPreset640x480;
+        avSessionPreset = AVCaptureSessionPresetiFrame960x540;
     }
         break;
     case LFCaptureSessionPreset540x960:{
