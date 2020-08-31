@@ -10,6 +10,7 @@
 #define LFLiveKit_h
 
 #import "LFLiveSession.h"
+#import "LFLiveFeatureConfig.h"
 #import "LFLiveAudioConfiguration.h"
 #import "LFLiveVideoConfiguration.h"
 #import "LFAudioFrame.h"

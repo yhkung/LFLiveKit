@@ -673,6 +673,7 @@
 		0686B4DB24E5A6280081F63B /* RKLinkedList.h in Headers */ = {isa = PBXBuildFile; fileRef = 0686B25024E5A6260081F63B /* RKLinkedList.h */; };
 		0686B4DC24E5A6280081F63B /* LFFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 0686B25124E5A6260081F63B /* LFFrame.m */; };
 		0686B4DD24E5A6280081F63B /* LFLiveKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0686B25224E5A6260081F63B /* LFLiveKit.h */; };
+		06A10E1624FCF7A8006AD48B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A10E1524FCF7A8006AD48B /* libz.tbd */; };
 		8495F66F1DB8F14600542124 /* LFLiveKitFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 8495F66D1DB8F14600542124 /* LFLiveKitFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84D8B4BF1D757EB800752B56 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D8B4BE1D757EB800752B56 /* VideoToolbox.framework */; };
 		84D8B4C11D757EBE00752B56 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D8B4C01D757EBE00752B56 /* AudioToolbox.framework */; };
@@ -1425,6 +1426,7 @@
 		0686B25024E5A6260081F63B /* RKLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKLinkedList.h; sourceTree = "<group>"; };
 		0686B25124E5A6260081F63B /* LFFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFFrame.m; sourceTree = "<group>"; };
 		0686B25224E5A6260081F63B /* LFLiveKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFLiveKit.h; sourceTree = "<group>"; };
+		06A10E1524FCF7A8006AD48B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		8495F66B1DB8F14600542124 /* LFLiveKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LFLiveKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8495F66D1DB8F14600542124 /* LFLiveKitFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LFLiveKitFramework.h; sourceTree = "<group>"; };
 		8495F66E1DB8F14600542124 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1541,6 +1543,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84D8B4C71D757ECC00752B56 /* UIKit.framework in Frameworks */,
+				06A10E1624FCF7A8006AD48B /* libz.tbd in Frameworks */,
 				84D8B4C51D757EC800752B56 /* Foundation.framework in Frameworks */,
 				84D8B4C31D757EC400752B56 /* AVFoundation.framework in Frameworks */,
 				84D8B4C11D757EBE00752B56 /* AudioToolbox.framework in Frameworks */,
@@ -1733,12 +1736,11 @@
 			children = (
 				0686B02B24E5A6250081F63B /* ping */,
 				0686B03024E5A6250081F63B /* Monitor */,
-				0686B03324E5A6250081F63B /* LFLiveFeatureConfig.h */,
+				06A10E1524FCF7A8006AD48B /* libz.tbd */,
+				0686B21F24E5A6260081F63B /* pili-librtmp */,
 				0686B03424E5A6250081F63B /* GPUImage */,
 				0686B19124E5A6260081F63B /* QBGLKit */,
 				0686B21924E5A6260081F63B /* RKGLKit */,
-				0686B21E24E5A6260081F63B /* LFLiveFeatureConfig.m */,
-				0686B21F24E5A6260081F63B /* pili-librtmp */,
 			);
 			path = Vendor;
 			sourceTree = "<group>";
@@ -2374,6 +2376,8 @@
 		0686B23A24E5A6260081F63B /* configuration */ = {
 			isa = PBXGroup;
 			children = (
+				0686B03324E5A6250081F63B /* LFLiveFeatureConfig.h */,
+				0686B21E24E5A6260081F63B /* LFLiveFeatureConfig.m */,
 				0686B23B24E5A6260081F63B /* LFLiveAudioConfiguration.h */,
 				0686B23C24E5A6260081F63B /* LFLiveVideoConfiguration.m */,
 				0686B23D24E5A6260081F63B /* LFLiveAudioConfiguration.m */,
