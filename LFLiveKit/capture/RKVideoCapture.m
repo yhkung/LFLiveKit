@@ -79,7 +79,7 @@
 
 - (void)dealloc {
     [self.queue cancelAllOperations];
-    [LFUtils sharedApplication].idleTimerDisabled = NO;
+    [self disableIdleTimer:NO];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.videoCamera stopCapture];
     
@@ -136,10 +136,10 @@
     _running = running;
     
     if (!_running) {
-        [LFUtils sharedApplication].idleTimerDisabled = NO;
+        [self disableIdleTimer:NO];
         [self.videoCamera stopCapture];
     } else {
-        [LFUtils sharedApplication].idleTimerDisabled = YES;
+        [self disableIdleTimer:YES];
         [self.videoCamera startCapture];
     }
 }
@@ -306,7 +306,7 @@
 #pragma mark - Notification
 
 - (void)willResignActive:(NSNotification *)notification {
-    [LFUtils sharedApplication].idleTimerDisabled = NO;
+    [self disableIdleTimer:NO];
     [self.videoCamera pauseCapture];
     NSLog(@"[GPUProcessing] camera pauseCapture");
     /**
@@ -325,7 +325,7 @@
 
 - (void)willEnterForeground:(NSNotification *)notification {
     [self.videoCamera resumeCapture];
-    [LFUtils sharedApplication].idleTimerDisabled = YES;
+    [self disableIdleTimer:YES];
 }
 
 - (void)statusBarChanged:(NSNotification *)notification {
@@ -470,6 +470,14 @@
 
 - (QBGLContext *)glContextForExtPresenter:(RKExtFilterPresenter *)presenter {
     return _glContext;
+}
+
+# pragma mark - Helper
+
+- (void)disableIdleTimer:(BOOL)disabled {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [LFUtils sharedApplication].idleTimerDisabled = disabled;
+    });
 }
 
 @end
