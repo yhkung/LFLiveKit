@@ -12,6 +12,7 @@
 #import "LFLiveSession.h"
 #import "LFLiveAudioConfiguration.h"
 #import "LFLiveVideoConfiguration.h"
+#import "LFLiveFeatureConfig.h"
 #import "LFAudioFrame.h"
 #import "LFFrame.h"
 #import "LFLiveStreamInfo.h"

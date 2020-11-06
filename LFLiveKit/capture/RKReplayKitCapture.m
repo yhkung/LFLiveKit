@@ -62,10 +62,9 @@
     if (!_videoConfiguration) {
         _videoConfiguration = [LFLiveVideoConfiguration defaultConfigurationFromSampleBuffer:sample];
         
-        if (@available(iOS 11.1, *)) {
-            CFNumberRef orientationAttachment = CMGetAttachment(sample, (__bridge CFStringRef)RPVideoSampleOrientationKey, NULL);
-            CGImagePropertyOrientation orientation = [(__bridge NSNumber*)orientationAttachment intValue];
-            _videoConfiguration.videoSize = orientation <= kCGImagePropertyOrientationDownMirrored ? self.targetCanvasSize : CGSizeMake(self.targetCanvasSize.height, self.targetCanvasSize.width);
+        CGSize targetCanvasSize = [self calculateCanvasSizeWithSample:sample];
+        if (!CGSizeEqualToSize(targetCanvasSize, CGSizeZero)) {
+            _videoConfiguration.videoSize = targetCanvasSize;
         }
         _glContext = [[RKReplayKitGLContext alloc] initWithCanvasSize:_videoConfiguration.videoSize];
     }
@@ -87,18 +86,21 @@
     if (@available(iOS 11.1, *)) {
         CFNumberRef orientationAttachment = CMGetAttachment(sample, (__bridge CFStringRef)RPVideoSampleOrientationKey, NULL);
         CGImagePropertyOrientation orientation = [(__bridge NSNumber*)orientationAttachment intValue];
+        BOOL mirror = (orientation > kCGImagePropertyOrientationDownMirrored);
         
-        CGSize canvasSize = orientation <= kCGImagePropertyOrientationDownMirrored ? self.targetCanvasSize : CGSizeMake(self.targetCanvasSize.height, self.targetCanvasSize.width);
-        _glContext.canvasSize = canvasSize;
-        
-        if (orientation == kCGImagePropertyOrientationUp) {
-            [_glContext setRotation:90];
-        } else if (orientation == kCGImagePropertyOrientationDown) {
-            [_glContext setRotation:-90];
-        } else if (orientation == kCGImagePropertyOrientationRight) {
-            [_glContext setRotation:180];
-        } else {
-            [_glContext setRotation:0];
+        CGSize canvasSize = [self calculateCanvasSizeWithSample:sample mirror:mirror];
+        if (!CGSizeEqualToSize(canvasSize, CGSizeZero)) {
+            _glContext.canvasSize = canvasSize;
+            
+            if (orientation == kCGImagePropertyOrientationUp) {
+                [_glContext setRotation:90];
+            } else if (orientation == kCGImagePropertyOrientationDown) {
+                [_glContext setRotation:-90];
+            } else if (orientation == kCGImagePropertyOrientationRight) {
+                [_glContext setRotation:180];
+            } else {
+                [_glContext setRotation:0];
+            }
         }
     }
 }
@@ -131,7 +133,6 @@
         AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
         NSAssert(audioBuffer.mDataByteSize % 2 == 0, @"data size error");
         NSAssert(audioBuffer.mData != NULL, @"data is null");
-        NSAssert(audioBuffer.mNumberChannels == 1, @"channel is not mono");
         [self convertAudioBufferToNativeEndian:audioBuffer fromFormat:_appAudioFormat];
         [self mixMicAudioToAudioBuffer:audioBuffer];
         NSData *data = [NSData dataWithBytes:audioBuffer.mData length:audioBuffer.mDataByteSize];
@@ -143,9 +144,10 @@
 - (void)pushMicAudioSample:(CMSampleBufferRef)sample {
     _micAudioFormat = *CMAudioFormatDescriptionGetStreamBasicDescription(CMSampleBufferGetFormatDescription(sample));
     
-    if (!_audioConfiguration) {
-        _audioConfiguration = [LFLiveAudioConfiguration defaultConfigurationFromFormat:_micAudioFormat];
-    }
+    // 不要在這裡去設定 _audioConfiguration，因為 _micAudioFormat 與 _appAudioFormat 裡的內容可能不同，ex: mSampleRate 不同
+//    if (!_audioConfiguration) {
+//        _audioConfiguration = [LFLiveAudioConfiguration defaultConfigurationFromFormat:_micAudioFormat];
+//    }
     
     AudioBufferList audioBufferList;
     CMBlockBufferRef blockBuffer;
@@ -162,23 +164,87 @@
         NSLog(@"mic audio sample error = %d", (int)status);
         return;
     }
+    
+    // 3900 = 48000 - 44100
+    Float64 sampleRateDiff = self.micAudioFormat.mSampleRate - self.appAudioFormat.mSampleRate;
+    int sampleRateDiffInt = 0;
+    if (self.appAudioFormat.mSampleRate > 0 && sampleRateDiff > FLT_EPSILON) {
+        sampleRateDiffInt = (int)sampleRateDiff;
+    }
+    
     for (int i = 0; i < audioBufferList.mNumberBuffers; i++) {
         AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
         NSAssert(audioBuffer.mDataByteSize % 2 == 0, @"data size error");
         NSAssert(audioBuffer.mData != NULL, @"data is null");
         NSAssert(audioBuffer.mNumberChannels == 1, @"channel is not mono");
         [self convertAudioBufferToNativeEndian:audioBuffer fromFormat:_micAudioFormat];
-        NSData *data = [NSData dataWithBytes:audioBuffer.mData length:audioBuffer.mDataByteSize];
+        NSData *data = [self syncMicAudioSampleRate:audioBuffer sampleRateDiff:sampleRateDiff];
         [_micDataSrc pushData:data];
     }
+    
     CFRelease(blockBuffer);
 }
 
+- (NSData *)syncMicAudioSampleRate:(AudioBuffer)audioBuffer sampleRateDiff:(int)sampleRateDiff {
+    // 調整 mic audio sample rate 與 app audio sample rate 一致
+    NSData *completeData = [NSData dataWithBytes:audioBuffer.mData length:audioBuffer.mDataByteSize];
+    if (sampleRateDiff <= 0) {
+        return completeData;
+    }
+    
+    // 20 這個值不是算出來的，是怕前面幾個 bytes 會包含一些 header 資料，所以刻意避開不要刪除
+    int theFirstReservedByteCount = 20;
+    // 2 這個值不是算出來的，只是取一個比較小的數值。因為一次在最末端刪除 166 bytes 會有雜音
+    int removedDataByteCount = 2;
+    int selectedDataIdx = theFirstReservedByteCount + removedDataByteCount;
+    
+    // 23.4375 = 48000 / 2048
+    Float64 calledTimesPerSec = self.micAudioFormat.mSampleRate / audioBuffer.mDataByteSize;
+    // 166 = 3900 / 23.4375
+    int totalRemovedByteCount = sampleRateDiff / calledTimesPerSec;
+    if (totalRemovedByteCount <= 0) {
+        return completeData;
+    }
+    
+    // 1862 = 2048 - 20 - 166
+    int remainedDataByteCount = audioBuffer.mDataByteSize - theFirstReservedByteCount - totalRemovedByteCount;
+    if (remainedDataByteCount <= 0) {
+        return completeData;
+    }
+    
+    // 83 = 166 / 2
+    int removedTimes = totalRemovedByteCount / removedDataByteCount;
+    // 22 = 1862 / 83
+    int subDataSize = remainedDataByteCount / removedTimes;
+    NSData *subData = [completeData subdataWithRange:NSMakeRange(0, theFirstReservedByteCount)];
+    NSMutableData *trimmedData = [subData mutableCopy];
+    // 減1是因為一開始已經先移掉一次了
+    int loopCount = removedTimes > 1 ? (removedTimes - 1) : 0;
+    for (int i = 0; i < loopCount; i++) {
+        subData = [completeData subdataWithRange:NSMakeRange(selectedDataIdx, subDataSize)];
+        [trimmedData appendData:subData];
+        selectedDataIdx += subDataSize + removedDataByteCount;
+    }
+    
+    NSUInteger finalSubDataSize = audioBuffer.mDataByteSize - selectedDataIdx;
+    subData = [completeData subdataWithRange:NSMakeRange(selectedDataIdx, finalSubDataSize)];
+    [trimmedData appendData:subData];
+    
+    return [trimmedData copy];
+}
+
 - (void)mixMicAudioToAudioBuffer:(AudioBuffer)audioBuffer {
+    // 1 char = 1 byte, 1 short = 2 bytes, 1 byte = 8 bits
+    // 1 channel = 16 bits = 2 bytes = 1 short = 2 chars
     char *audioBytes = audioBuffer.mData;
-    for (int i = 0; i < audioBuffer.mDataByteSize && _micDataSrc.hasNext; i += 2) {
+    int bytePerChannel = 2;
+    int bytePerFrame = bytePerChannel * audioBuffer.mNumberChannels;
+    short b = 0;
+    for (int i = 0; i < audioBuffer.mDataByteSize && _micDataSrc.hasNext; i += bytePerChannel) {
         short a = (short)(((audioBytes[i + 1] & 0xFF) << 8) | (audioBytes[i] & 0xFF));
-        short b = [_micDataSrc next];
+        if (i % bytePerFrame == 0) {
+            b = [_micDataSrc next];
+        }
         int mixed = (a + b) / 2;
         audioBytes[i] = mixed & 0xFF;
         audioBytes[i + 1] = (mixed >> 8) & 0xFF;
@@ -236,6 +302,29 @@
             ptr += 2;
         }
     }
+}
+
+- (CGSize)calculateCanvasSizeWithSample:(CMSampleBufferRef)sample {
+    if (@available(iOS 11.1, *)) {
+        CFNumberRef orientationAttachment = CMGetAttachment(sample, (__bridge CFStringRef)RPVideoSampleOrientationKey, NULL);
+        CGImagePropertyOrientation orientation = [(__bridge NSNumber*)orientationAttachment intValue];
+        BOOL mirror = (orientation > kCGImagePropertyOrientationDownMirrored);
+        
+        return [self calculateCanvasSizeWithSample:sample mirror:mirror];
+    }
+    
+    return CGSizeZero;
+}
+
+- (CGSize)calculateCanvasSizeWithSample:(CMSampleBufferRef)sample mirror:(BOOL)mirror {
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sample);
+    CGSize inputSize = CGSizeMake(CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer));
+    CGFloat outputHeight = self.targetCanvasSize.width * inputSize.height / inputSize.width;
+    CGSize outputSize = CGSizeMake(self.targetCanvasSize.width, outputHeight);
+    if (mirror) {
+        outputSize = CGSizeMake(outputSize.height, outputSize.width);
+    }
+    return outputSize;
 }
 
 @end

@@ -127,7 +127,17 @@ typedef NS_ENUM(NSInteger, RKColorFilter) {
 
 @protocol LFVideoCaptureInterfaceDelegate <NSObject>
 @optional
+- (void)captureOutput:(nullable id<LFVideoCaptureInterface>)capture
+          pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer
+               atTime:(CMTime)time
+didUpdateVideoConfiguration:(BOOL)didUpdateVideoConfiguration;
 - (void)captureOutput:(nullable id<LFVideoCaptureInterface>)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer atTime:(CMTime)time;
 - (void)captureRawCamera:(nullable id<LFVideoCaptureInterface>)capture pixelBuffer:(nullable CVPixelBufferRef)pixelBuffer atTime:(CMTime)time;
+
+
+- (NSArray<NSDictionary *> *)boxesRenderInfosForVideoCapture:(nullable id<LFVideoCaptureInterface>)capture;
+- (NSArray<NSDictionary *> *)gameRenderInfosForVideoCapture:(nullable id<LFVideoCaptureInterface>)capture;
+- (NSArray<NSDictionary *> *)painterRenderInfosForVideoCapture:(nullable id<LFVideoCaptureInterface>)capture;
+- (BOOL)painterShouldRenderForVideoCapture:(nullable id<LFVideoCaptureInterface>)capture;
 
 @end

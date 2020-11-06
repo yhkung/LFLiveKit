@@ -72,16 +72,19 @@ SAVC(mp4a);
 
 @property (strong, nonatomic) NSData *seiData;
 
+// 在送出 video/audio header 之後，第一個送出的 video/audio frame 必須是 key frame
+@property (assign, nonatomic) BOOL ensureAVKeyFrameSentFirst;
+
 @end
 
 @implementation LFStreamRTMPSocket
 
 #pragma mark -- LFStreamSocket
 - (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream{
-    return [self initWithStream:stream reconnectInterval:0 reconnectCount:0];
+    return [self initWithStream:stream reconnectInterval:0 reconnectCount:0 ensureAVKeyFrameSentFirst:YES];
 }
 
-- (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream reconnectInterval:(NSInteger)reconnectInterval reconnectCount:(NSInteger)reconnectCount{
+- (nullable instancetype)initWithStream:(nullable LFLiveStreamInfo *)stream reconnectInterval:(NSInteger)reconnectInterval reconnectCount:(NSInteger)reconnectCount ensureAVKeyFrameSentFirst:(BOOL)ensureAVKeyFrameSentFirst {
     if (!stream) @throw [NSException exceptionWithName:@"LFStreamRtmpSocket init error" reason:@"stream is nil" userInfo:nil];
     if (self = [super init]) {
         _stream = stream;
@@ -90,6 +93,8 @@ SAVC(mp4a);
         
         if (reconnectCount > 0) _reconnectCount = reconnectCount;
         else _reconnectCount = RetryTimesBreaken;
+        
+        _ensureAVKeyFrameSentFirst = ensureAVKeyFrameSentFirst;
         
         [self addObserver:self forKeyPath:@"isSending" options:NSKeyValueObservingOptionNew context:nil];//这里改成observer主要考虑一直到发送出错情况下，可以继续发送
     }
@@ -197,26 +202,53 @@ SAVC(mp4a);
             // 调用发送接口
             LFFrame *frame = [_self.buffer popFirstObject];
             if ([frame isKindOfClass:[LFVideoFrame class]]) {
-                if (!_self.sendVideoHead || ((LFVideoFrame*)frame).formatChanged) {
-                    _self.sendVideoHead = YES;
-                    if(!((LFVideoFrame*)frame).sps || !((LFVideoFrame*)frame).pps){
-                        _self.isSending = NO;
-                        return;
+                if (_self.ensureAVKeyFrameSentFirst) {
+                    if (!_self.sendVideoHead || ((LFVideoFrame*)frame).formatChanged) {
+                        _self.sendVideoHead = YES;
+                        if (!((LFVideoFrame*)frame).sps || !((LFVideoFrame*)frame).pps) {
+                            _self.isSending = NO;
+                            return;
+                        }
+                        [_self sendVideoHeader:(LFVideoFrame *)frame];
                     }
-                    [_self sendVideoHeader:(LFVideoFrame *)frame];
-                } else {
                     [_self sendVideo:(LFVideoFrame *)frame];
-                }
-            } else {
-                if (!_self.sendAudioHead) {
-                    _self.sendAudioHead = YES;
-                    if(!((LFAudioFrame*)frame).audioInfo){
-                        _self.isSending = NO;
-                        return;
-                    }
-                    [_self sendAudioHeader:(LFAudioFrame *)frame];
+                    
                 } else {
+                    if (!_self.sendVideoHead || ((LFVideoFrame*)frame).formatChanged) {
+                        _self.sendVideoHead = YES;
+                        if (!((LFVideoFrame*)frame).sps || !((LFVideoFrame*)frame).pps) {
+                            _self.isSending = NO;
+                            return;
+                        }
+                        [_self sendVideoHeader:(LFVideoFrame *)frame];
+                    } else {
+                        [_self sendVideo:(LFVideoFrame *)frame];
+                    }
+                }
+                
+            } else {
+                if (_self.ensureAVKeyFrameSentFirst) {
+                    if (!_self.sendAudioHead) {
+                        _self.sendAudioHead = YES;
+                        if (!((LFAudioFrame*)frame).audioInfo){
+                            _self.isSending = NO;
+                            return;
+                        }
+                        [_self sendAudioHeader:(LFAudioFrame *)frame];
+                    }
                     [_self sendAudio:frame];
+                    
+                } else {
+                    if (!_self.sendAudioHead) {
+                        _self.sendAudioHead = YES;
+                        if (!((LFAudioFrame*)frame).audioInfo) {
+                            _self.isSending = NO;
+                            return;
+                        }
+                        [_self sendAudioHeader:(LFAudioFrame *)frame];
+                    } else {
+                        [_self sendAudio:frame];
+                    }
                 }
             }
             
@@ -319,7 +351,7 @@ SAVC(mp4a);
     if (PILI_RTMP_ConnectStream(_rtmp, 0, &_error) == FALSE) {
         goto Failed;
     }
-    int64_t initInterval = ([NSDate date].timeIntervalSince1970 - [LFStreamLog logger].initStartTime) * 1000;
+    NSUInteger initInterval = ([NSDate date].timeIntervalSince1970 - [LFStreamLog logger].initStartTime) * 1000;
     [[LFStreamLog logger] logWithDict:@{@"lt": @"pinit",
                                         @"interval": @(initInterval)}];
     //reconnect times
@@ -659,6 +691,12 @@ print_bytes(void   *start,
     free(body);
 }
 
+- (void)occurRTMPErrorWithErrorCode:(int)errorCode errorMessage:(NSString *)errorMessage {
+    if ([self.delegate respondsToSelector:@selector(socketDidOccurRTMPError:errorCode:errorMessage:)]) {
+        [self.delegate socketDidOccurRTMPError:self errorCode:errorCode errorMessage:errorMessage];
+    }
+}
+
 // 断线重连
 - (void)reconnect {
     dispatch_async(self.rtmpSendQueue, ^{
@@ -703,6 +741,11 @@ print_bytes(void   *start,
         PILI_RTMP_Close(_rtmp, &_error);
         PILI_RTMP_Free(_rtmp);
     }
+    
+    if ([self.delegate respondsToSelector:@selector(socketStartReconnect:pushUrl:)]) {
+        [self.delegate socketStartReconnect:self pushUrl:_stream.url];
+    }
+
     [self RTMP264_Connect:(char *)[_stream.url cStringUsingEncoding:NSASCIIStringEncoding]];
 }
 
@@ -710,6 +753,9 @@ print_bytes(void   *start,
 void RTMPErrorCallback(RTMPError *error, void *userData) {
     LFStreamRTMPSocket *socket = (__bridge LFStreamRTMPSocket *)userData;
     if (error->code < 0) {
+        NSString *errorMessage = (error->message) == NULL ? @"" : @(error->message);
+        NSLog(@"[SEL] RTMP error: %@", errorMessage);
+        [socket occurRTMPErrorWithErrorCode:error->code errorMessage:errorMessage];
         [socket reconnect];
     }
 }
