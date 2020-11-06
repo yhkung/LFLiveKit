@@ -4479,7 +4479,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MARKETING_VERSION = 2.8.46;
+				MARKETING_VERSION = 2.8.47;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youku.LFLiveKit;
 				PRODUCT_NAME = LFLiveKit;
@@ -4505,7 +4505,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
-				MARKETING_VERSION = 2.8.46;
+				MARKETING_VERSION = 2.8.47;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youku.LFLiveKit;
 				PRODUCT_NAME = LFLiveKit;
@@ -4636,7 +4636,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACH_O_TYPE = mh_dylib;
-				MARKETING_VERSION = 2.8.46;
+				MARKETING_VERSION = 2.8.47;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youku.LFLiveKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4661,7 +4661,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACH_O_TYPE = mh_dylib;
-				MARKETING_VERSION = 2.8.46;
+				MARKETING_VERSION = 2.8.47;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.youku.LFLiveKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
