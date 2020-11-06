@@ -29,6 +29,7 @@
 + (void)bindTexture:(GLuint)textureId;
 
 + (GLenum)activeTextureFromIndex:(GLuint)index;
++ (CGRect)ratio16isTo9FillScreenRect;
 
 @end
 

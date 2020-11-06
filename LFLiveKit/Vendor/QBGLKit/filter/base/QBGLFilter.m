@@ -21,6 +21,7 @@ char * const kQBNoFilterFragment;
 @property (strong, nonatomic) QBGLDrawable *inputImageDrawable;
 
 @property (assign, nonatomic) GLuint outputFrameBuffer;
+@property (assign, nonatomic) GLuint depthRenderBuffer;
 
 // animation
 @property (assign, nonatomic) int attrInputAnimationCoordinate;
@@ -69,18 +70,20 @@ char * const kQBNoFilterFragment;
         0.0f, 1.0f,
     };
     
+    // vertical flip first and then rotate right
     static const GLfloat rotateRightVerticalFlipTextureCoordinates[] = {
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 0.0f,
         1.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
     };
     
+    // horizontal flip first and then rotate right
     static const GLfloat rotateRightHorizontalFlipTextureCoordinates[] = {
-        1.0f, 1.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
         0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
     };
     
     static const GLfloat rotate180TextureCoordinates[] = {
@@ -88,6 +91,38 @@ char * const kQBNoFilterFragment;
         0.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
+    };
+    
+    // vertical flip first and then rotate left
+    static const GLfloat rotateLeftVerticalFlipTextureCoordinates[] = {
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+    };
+    
+    // horizontal flip first and then rotate left
+    static const GLfloat rotateLeftHorizontalFlipTextureCoordinates[] = {
+        1.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+    };
+    
+    // vertical flip first and then rotate 180
+    static const GLfloat rotate180VerticalFlipTextureCoordinates[] = {
+        1.0f, 0.0f,
+        0.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+    };
+    
+    // horizontal flip first and then rotate 180
+    static const GLfloat rotate180HorizontalFlipTextureCoordinates[] = {
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
     };
     
     switch(rotation) {
@@ -107,6 +142,14 @@ char * const kQBNoFilterFragment;
             return rotateRightHorizontalFlipTextureCoordinates;
         case QBGLImageRotation180:
             return rotate180TextureCoordinates;
+        case QBGLImageRotationLeftFlipVertical:
+            return rotateLeftVerticalFlipTextureCoordinates;
+        case QBGLImageRotationLeftFlipHorizontal:
+            return rotateLeftHorizontalFlipTextureCoordinates;
+        case QBGLImageRotation180FlipVertical:
+            return rotate180VerticalFlipTextureCoordinates;
+        case QBGLImageRotation180FlipHorizontal:
+            return rotate180HorizontalFlipTextureCoordinates;
     }
 }
 
@@ -204,7 +247,7 @@ char * const kQBNoFilterFragment;
     [self.program setParameter:"enableAnimationView" intValue:(self.enableAnimationView ? 1 : 0)];
     if (self.animationView) {
         [self.program enableAttributeWithId:self.attrInputAnimationCoordinate];
-        glVertexAttribPointer(self.attrInputAnimationCoordinate, 2, GL_FLOAT, 0, 0, [QBGLFilter textureCoordinatesForRotation:QBGLImageRotationNone]);
+        glVertexAttribPointer(self.attrInputAnimationCoordinate, 2, GL_FLOAT, 0, 0, [self.class textureCoordinatesForRotation:_animationRotation]);
     }
 }
 
@@ -212,6 +255,26 @@ char * const kQBNoFilterFragment;
     if (self.animationView) {
         [self.animationDrawable reloadView:self.animationView];
     }
+}
+
+- (void)renderDrawable:(QBGLDrawable *)drawable {
+    if (!drawable) {
+        return;
+    }
+    
+    [self bindDrawable];
+    
+    [_program use];
+    [_program enableAttributeWithId:_attrPosition];
+    [_program enableAttributeWithId:_attrInputTextureCoordinate];
+    
+    glVertexAttribPointer(_attrPosition, 2, GL_FLOAT, 0, 0, squareVertices);
+    glVertexAttribPointer(_attrInputTextureCoordinate, 2, GL_FLOAT, 0, 0, [self.class textureCoordinatesForRotation:_inputRotation]);
+    
+    [self setAdditionalUniformVarsForRender];
+    [self updateDrawable];
+    
+    [drawable prepareToDrawAtTextureIndex:0 program:_program];
 }
 
 - (GLuint)render {
@@ -240,9 +303,9 @@ char * const kQBNoFilterFragment;
 }
 
 - (void)draw {
-    glViewport(0, 0, _outputSize.width, _outputSize.height);
+    glViewport(0, 0, _viewPortSize.width, _viewPortSize.height);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
@@ -253,7 +316,8 @@ char * const kQBNoFilterFragment;
     CVPixelBufferCreate(kCFAllocatorDefault, _outputSize.width, _outputSize.height, kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef) attrs, &_outputPixelBuffer);
     
     CVOpenGLESTextureRef outputTextureRef;
-    CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+    CVReturn error = kCVReturnSuccess;
+    error = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
                                                  _textureCacheRef,
                                                  _outputPixelBuffer,
                                                  NULL,
@@ -265,6 +329,11 @@ char * const kQBNoFilterFragment;
                                                  GL_UNSIGNED_BYTE,
                                                  0,
                                                  &outputTextureRef);
+    if (error) {
+        NSLog(@"Fail to create output texture!");
+        return;
+    }
+    
     _outputTextureId = CVOpenGLESTextureGetName(outputTextureRef);
     [QBGLUtils bindTexture:_outputTextureId];
     CFRelease(outputTextureRef);
@@ -273,6 +342,17 @@ char * const kQBNoFilterFragment;
     glGenFramebuffers(1, &_outputFrameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _outputFrameBuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _outputTextureId, 0);
+    
+    // Bind RenderBuffer for depth test
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _outputSize.width, _outputSize.height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+}
+
+- (void)releaseUsages {
+    [self unloadOutputBuffer];
+    [self deleteTextures];
 }
 
 - (void)unloadOutputBuffer {
@@ -285,6 +365,10 @@ char * const kQBNoFilterFragment;
     }
     if (_outputFrameBuffer) {
         glDeleteFramebuffers(1, &_outputFrameBuffer);
+    }
+    
+    if (_depthRenderBuffer) {
+        glDeleteRenderbuffers(1, &_depthRenderBuffer);
     }
 }
 

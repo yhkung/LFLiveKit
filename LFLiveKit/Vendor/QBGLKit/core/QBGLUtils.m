@@ -39,6 +39,8 @@
     CGColorSpaceRef genericRGBColorspace = CGColorSpaceCreateDeviceRGB();
     CGContextRef imageContext = CGBitmapContextCreate(imageData, (int)layerPixelSize.width, (int)layerPixelSize.height, 8, (int)layerPixelSize.width * 4, genericRGBColorspace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
     
+    CGContextSetInterpolationQuality(imageContext, kCGInterpolationLow);
+    
     if (horizontalFlip && verticalFlip) {
         CGContextTranslateCTM(imageContext, layerPixelSize.width, 0.f);
         CGContextScaleCTM(imageContext, -sourceView.layer.contentsScale, sourceView.layer.contentsScale);
@@ -166,6 +168,25 @@
         default:
             return GL_ACTIVE_TEXTURE;
     }
+}
+
++ (CGRect)ratio16isTo9FillScreenRect {
+    CGRect frame = [UIScreen mainScreen].bounds;
+    CGFloat widthDiff = 0.f;
+    CGFloat heightDiff = 0.f;
+    if (frame.size.width * 16.f < frame.size.height * 9.f) {
+        CGFloat newWidth = frame.size.height * 9.f / 16.f;
+        widthDiff = newWidth - frame.size.width;
+        frame.size.width = newWidth;
+        frame.origin.x = frame.origin.x - widthDiff / 2.f;
+        
+    } else if (frame.size.width * 16.f > frame.size.height * 9.f) {
+        CGFloat newHeight = frame.size.width * 16.f / 9.f;
+        heightDiff = newHeight - frame.size.height;
+        frame.size.height = newHeight;
+        frame.origin.y = frame.origin.y - heightDiff / 2.f;
+    }
+    return frame;
 }
 
 @end

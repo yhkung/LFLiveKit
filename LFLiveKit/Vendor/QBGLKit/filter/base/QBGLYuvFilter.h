@@ -9,6 +9,7 @@
 #import "QBGLFilter.h"
 
 @interface QBGLYuvFilter : QBGLFilter
+@property (assign, nonatomic) BOOL hasSnowEffect;
 - (void)loadYUV:(CVPixelBufferRef)pixelBuffer;
 
 @end
